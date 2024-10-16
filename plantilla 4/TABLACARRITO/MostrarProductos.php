@@ -11,13 +11,14 @@ if ($conn->connect_error) {
 }
 
 // Consulta para obtener los productos
-$sql = "SELECT id_producto, nombre, descripcion, precio, imagen FROM productos";
+$sql = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos";
 $result = $conn->query($sql);
 ?>
 
 <!DOCTYPE html>
 <html lang="es">
 <head>
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
@@ -31,6 +32,7 @@ $result = $conn->query($sql);
     <link rel="icon" href="../images/fevicon.png" type="image/gif" />
     <title>Mostrar Productos</title>
     <style>
+        
     .card {
         width: 15rem;
         margin: 1rem;
@@ -72,6 +74,34 @@ $result = $conn->query($sql);
     #cart h5 {
         margin-bottom: 15px;
     }
+
+    /* FIN para el carrito */
+
+    /* Estilos para el detalle carrito */
+    .cart-item {
+            display: flex;
+            align-items: center;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .cart-item img {
+            width: 50px;
+            height: 50px;
+            object-fit: cover;
+            margin-right: 15px;
+        }
+
+        .cart-item .cart-details {
+            flex-grow: 1;
+        }
+
+        .cart-item .cart-price {
+            font-weight: bold;
+        }
+
+
+
     </style>
 </head>
 <body>
@@ -155,7 +185,8 @@ $result = $conn->query($sql);
                 echo '<h5 class="card-title">' . htmlspecialchars($row["nombre"]) . '</h5>';
                 echo '<p class="card-text">' . htmlspecialchars($row["descripcion"]) . '</p>';
                 echo '<p class="card-text">Precio: $' . $row["precio"] . '</p>';
-                echo '<input type="number" class="form-control mb-2 product-quantity" value="1" min="1" data-id="' . $row["id_producto"] . '" data-name="' . htmlspecialchars($row["nombre"]) . '" data-price="' . $row["precio"] . '">';
+                // Aquí añadimos el atributo data-weight
+                echo '<input type="number" class="form-control mb-2 product-quantity" value="1" min="1" data-id="' . $row["id_producto"] . '" data-name="' . htmlspecialchars($row["nombre"]) . '" data-price="' . $row["precio"] . '" data-weight="' . $row["peso"] . '" data-image="' . htmlspecialchars($image_path) . '" data-description="' . htmlspecialchars($row["descripcion"]) . '">';
                 echo '<button class="btn btn-primary add-to-cart" data-id="' . $row["id_producto"] . '" data-name="' . htmlspecialchars($row["nombre"]) . '" data-price="' . $row["precio"] . '">Agregar al Carrito</button>';
                 echo '</div>';
                 echo '</div>';
@@ -177,6 +208,38 @@ $result = $conn->query($sql);
     // Manejar los productos en el carrito
     let cart = [];
     let cartTotal = 0;
+    let totalWeight = 0;
+
+    // Precios de los costales
+    const bagPrices = {
+        '1kg': 79,
+        '5kg': 393,
+        '10kg': 786
+    };
+
+    // Función que determina cuántos costales son necesarios según el peso total
+    function calculatePackaging(totalWeight) {
+        let cost = 0;
+
+        // Redondear hacia arriba el peso a la siguiente unidad si el decimal es mayor a 0.50
+        totalWeight = Math.ceil(totalWeight); 
+
+        // Comenzamos a restar según el peso redondeado
+        while (totalWeight > 0) {
+            if (totalWeight >= 10) {
+                cost += bagPrices['10kg'];
+                totalWeight -= 10;
+            } else if (totalWeight >= 5) {
+                cost += bagPrices['5kg'];
+                totalWeight -= 5;
+            } else if (totalWeight >= 1) {
+                cost += bagPrices['1kg'];
+                totalWeight -= 1;
+            }
+        }
+
+        return cost;
+    }
 
     // Función para actualizar el carrito en la interfaz
     function updateCart() {
@@ -191,41 +254,73 @@ $result = $conn->query($sql);
             cartItemsContainer.innerHTML = '<li class="list-group-item">No hay productos en el carrito</li>';
         } else {
             // Mostrar los productos en el carrito
-            cart.forEach(function(item, index) {
+            cart.forEach(function(item) {
                 let listItem = document.createElement('li');
                 listItem.classList.add('list-group-item');
-                listItem.innerHTML = `${item.name} - $${item.price}`;
+
+                // Crear contenido del producto (imagen + detalles)
+                listItem.innerHTML = `
+                    <div class="cart-item">
+                        <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;">
+                        <div class="cart-details">
+                            <strong>${item.name}</strong>
+                            <p>${item.description}</p>
+                            <p>Peso: ${item.weight}kg</p>
+                        </div>
+                        <span class="cart-price">$${item.price}</span>
+                    </div>
+                `;
                 cartItemsContainer.appendChild(listItem);
             });
         }
 
-        // Actualizar el total del carrito
-        cartTotalElement.innerText = cartTotal.toFixed(2);
+        // Calcular el costo de los costales según el peso total de los productos
+        let packagingCost = calculatePackaging(totalWeight);
+
+        // Actualizar el total del carrito sumando el costo de los productos y el embalaje
+        let totalCost = cartTotal + packagingCost;
+        cartTotalElement.innerText = totalCost.toFixed(2);
     }
 
     // Manejar el evento de añadir productos al carrito
     document.querySelectorAll('.add-to-cart').forEach(function(button) {
-    button.addEventListener('click', function() {
-        let productId = this.getAttribute('data-id');
-        let productName = this.getAttribute('data-name');
-        let productPrice = parseFloat(this.getAttribute('data-price'));
+        button.addEventListener('click', function() {
+            let productId = this.getAttribute('data-id');
+            let productName = this.getAttribute('data-name');
+            let productPrice = parseFloat(this.getAttribute('data-price'));
+            let productWeight = parseFloat(this.previousElementSibling.getAttribute('data-weight'));
+            let productImage = this.previousElementSibling.getAttribute('data-image');
+            let productDescription = this.previousElementSibling.getAttribute('data-description');
 
-        // Obtener la cantidad seleccionada para este producto
-        let quantityInput = this.previousElementSibling; // Seleccionamos el input anterior al botón
-        let quantity = parseInt(quantityInput.value);
+            // Obtener la cantidad seleccionada para este producto
+            let quantityInput = this.previousElementSibling; 
+            let quantity = parseInt(quantityInput.value);
 
-        // Añadir la cantidad seleccionada al carrito
-        for (let i = 0; i < quantity; i++) {
-            cart.push({ id: productId, name: productName, price: productPrice });
-        }
+            // Añadir la cantidad seleccionada al carrito
+            for (let i = 0; i < quantity; i++) {
+                cart.push({
+                    id: productId, 
+                    name: productName, 
+                    price: productPrice, 
+                    weight: productWeight, 
+                    image: productImage, 
+                    description: productDescription 
+                });
+            }
 
-        // Sumar el total según la cantidad seleccionada
-        cartTotal += productPrice * quantity;
+            // Sumar el peso total de los productos agregados
+            totalWeight += productWeight * quantity;
 
-        // Actualizar la vista del carrito
-        updateCart();
+            // Sumar el total según la cantidad seleccionada
+            cartTotal += productPrice * quantity;
+
+            // Actualizar la vista del carrito
+            updateCart();
+        });
     });
-});
 </script>
+
+
+
 </body>
 </html>

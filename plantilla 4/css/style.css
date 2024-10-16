@@ -582,7 +582,7 @@ button {
 /** end about section **/
 
 
-/** service section **/
+/** valores section **/
 
 .service {
      padding-top: 80px;
@@ -597,7 +597,7 @@ button {
 }
 
 .mar_top {
-     margin-top: -35px;
+     margin-top: 0;
 }
 
 .service_box p {
@@ -610,15 +610,24 @@ button {
      margin-top: 60px;
 }
 
+.service-img {
+     width: 100%; /* Ajusta el ancho al 100% de su contenedor */
+     height: auto; /* Mantiene la proporción de la imagen */
+     max-width: 90px; /* Establece un ancho máximo para las imágenes */
+     margin: 0 auto; /* Centra la imagen en su contenedor */
+  }
 
-/** end service section **/
+
+/** end valores section **/
 
 
 /** gallery  section **/
 
 .gallery {
-     margin-top: 80px;
-     padding-top: 80px;
+     margin-top: 70px;
+     padding-top: 70px;
+     object-fit: contain; /* Mantiene la imagen completa sin recorte */
+
      background-color: #eae7e7;
      padding-bottom: 50px;
 }
@@ -634,6 +643,8 @@ button {
 }
 
 .gallery .gallery_img {
+     width: 100%;
+     height: 360px;  /* Ajuste de altura fijo */
      overflow: hidden;
      margin-bottom: 30px;
 }
@@ -682,7 +693,21 @@ button {
 
 .design {
      padding-top: 80px;
-}
+     display: flex;
+     justify-content: center;
+     align-items: center;
+     flex-direction: column;
+ }
+
+ .d_flex {
+     display: flex;
+     justify-content: center; /* Centra horizontalmente */
+     align-items: center;     /* Centra verticalmente */
+ }
+
+ .carousel-caption {
+     text-align: center;
+ }
 
 .text_de p {
      color: #2a2b2a;
@@ -740,12 +765,22 @@ button {
 
 .pad_roght0 {
      padding-right: 0;
-}
+     display: flex;
+     justify-content: center; /* Centra el video horizontalmente */
+     align-items: center;     /* Centra el video verticalmente */
+ }
 
 .text_de .titlepage {
      padding-bottom: 30px;
 }
 
+
+.custom-video {
+     width: 100%;
+     max-width: 250px; /* Ajusta el tamaño máximo del video */
+     height: auto;
+ }
+  
 
 /** end design section **/
 
@@ -1281,4 +1316,83 @@ ul.link_menu li a:hover {
  
  /** End Login Section **/
 
- /** Tarjetas de Catalogo **/
+  /* Diagrama */
+.diagram-section {
+     display: none; /* Ocultamos todas las secciones por defecto */
+     text-align: center;
+     opacity: 0; /* Inicialmente invisibles */
+     transition: opacity 0.5s ease-in-out; /* Transición suave */
+     max-width: 800px; /* Tamaño máximo de la sección */
+     height: 450px; /* Altura fija */
+     margin: 0 auto; /* Centrado horizontal */
+     padding: 20px;
+     background-color: #f9f9f9; /* Fondo suave para destacar el contenido */
+     border-radius: 10px; /* Bordes redondeados */
+     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); /* Sombra para dar profundidad */
+ }
+ 
+ /* Imágenes en las secciones */
+ .diagram-section img {
+     width: 100%; /* Asegura que la imagen se ajuste al tamaño de la sección */
+     height: auto; /* Mantiene la proporción de la imagen */
+     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.15); /* Sombra a las imágenes */
+     border-radius: 8px; /* Bordes redondeados en las imágenes */
+ }
+ 
+ /* Activamos la sección actual */
+ .diagram-section.active {
+     display: block; /* Mostramos solo la sección activa */
+     opacity: 1; /* Hacemos visible la sección activa */
+ }
+ 
+ /* Controles de navegación */
+ .navigation {
+     text-align: center;
+     margin: 20px 0;
+ }
+ 
+ .navigation button {
+     padding: 10px 15px;
+     margin: 0 10px;
+     cursor: pointer;
+     font-size: 16px; /* Tamaño de fuente más grande */
+     background-color: #4CAF50; /* Fondo verde en los botones */
+     color: white; /* Texto blanco */
+     border: none;
+     border-radius: 5px; /* Bordes redondeados */
+     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Sombra en los botones */
+     transition: background-color 0.3s ease; /* Transición de color */
+ }
+ 
+ .navigation button:hover {
+     background-color: #45a049; /* Cambia de color al hacer hover */
+ }
+ 
+ /* Ajuste específico para la imagen de la sección 4 */
+ #section-4 img {
+     max-width: 70%;  /* Ajusta esta imagen al 90% */
+ }
+
+ /*Barra de progreso */
+ .progress-bar {
+     width: 100%;
+     height: 10px;
+     background-color: #e0e0e0;
+     border-radius: 5px;
+     margin-bottom: 20px;
+     position: relative;
+ }
+ 
+ .progress {
+     width: calc(100% / 6 * 1); /* Esto se ajustará dinámicamente en JS */
+     height: 100%;
+     background-color: #4caf50;
+     border-radius: 5px;
+     transition: width 0.3s ease;
+ }
+
+ 
+ 
+ 
+
+ 

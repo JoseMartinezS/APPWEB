@@ -11,7 +11,11 @@
     <link rel="icon" href="../images/fevicon.png" type="image/gif" />
 
     <style>
-        
+        body {
+            background-color: #e6f9e6;
+            font-family: 'Arial', sans-serif;
+        }
+
     </style>
 </head>
 <body>
@@ -100,6 +104,11 @@
                             <div class="form-outline mb-4">
                                 <input type="number" name="stock" id="stock" class="form-control" required />
                                 <label class="form-label" for="stock">Stock</label>
+                            </div>
+
+                            <div class="form-outline mb-4">
+                            <input type="number" step="0.01" name="peso" id="peso" class="form-control" required />
+                            <label class="form-label" for="peso">Peso(KG)</label>
                             </div>
 
                             <div class="form-outline mb-4">

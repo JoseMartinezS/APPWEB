@@ -4,6 +4,7 @@ $nombre = $_POST["nombre"];
 $descripcion = $_POST["descripcion"];
 $precio = $_POST["precio"];
 $stock = $_POST["stock"];
+$peso = $_POST["peso"];
 
 // Configuración de la conexión
 require_once('../config.inc.php');
@@ -26,8 +27,8 @@ if (isset($_FILES["imagen"]) && $_FILES["imagen"]["error"] == 0) {
 }
 
 // Preparar la consulta SQL
-$sql = "INSERT INTO productos (nombre, descripcion, precio, stock, imagen) 
-VALUES ('$nombre', '$descripcion', '$precio', '$stock', '$imagen')";
+$sql = "INSERT INTO productos (nombre, descripcion, precio, stock, peso, imagen) 
+VALUES ('$nombre', '$descripcion', '$precio', '$stock', '$peso', '$imagen')";
 
 if ($conn->query($sql) === TRUE) {
     // Cerrar conexión
