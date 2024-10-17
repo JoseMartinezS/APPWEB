@@ -1368,10 +1368,7 @@ ul.link_menu li a:hover {
      background-color: #45a049; /* Cambia de color al hacer hover */
  }
  
- /* Ajuste específico para la imagen de la sección 4 */
- #section-4 img {
-     max-width: 70%;  /* Ajusta esta imagen al 90% */
- }
+ 
 
  /*Barra de progreso */
  .progress-bar {
