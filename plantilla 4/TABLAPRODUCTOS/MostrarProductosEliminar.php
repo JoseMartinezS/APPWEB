@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 // Consulta para obtener los productos
-$sql = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos";
+$sql = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos WHERE status = 1";
 $result = $conn->query($sql);
 ?>
 
@@ -171,7 +171,8 @@ $result = $conn->query($sql);
         </div>
     </div>
 </header>
-
+<br>
+    </br>
 <h1>Productos Disponibles</h1>
 
 <div class="product-grid">
@@ -194,8 +195,11 @@ $result = $conn->query($sql);
             echo "<p class='price'>Precio: $" . $row["precio"] . "</p>";
             echo "<p>Peso: " . htmlspecialchars($row["peso"]) . " kg</p>";
             echo "<div class='actions'>
-                    <a href='editar_producto.php?id=" . $row["id_producto"] . "' class='edit'>Editar</a>
-                    <a href='eliminar_producto.php?id=" . $row["id_producto"] . "' class='delete' onclick='return confirm(\"¿Estás seguro de que quieres eliminar este producto?\")'>Eliminar</a>
+                    <a href='ActualizarProducto.php?id=" . $row["id_producto"] . "' class='edit'>Editar</a>
+                    <form action='EliminarProductos.php' method='POST' style='display:inline;'>
+                        <input type='hidden' name='id_producto' value='" . $row["id_producto"] . "'>
+                        <button type='submit' class='btn btn-danger' onclick='return confirm(\"¿Estás seguro de que quieres eliminar este producto?\")'>Eliminar</button>
+                    </form>
                   </div>";
             echo "</div>";
         }

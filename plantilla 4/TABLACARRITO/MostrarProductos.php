@@ -11,7 +11,7 @@ if ($conn->connect_error) {
 }
 
 // Consulta para obtener los productos
-$sql = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos";
+$sql = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos WHERE status = 1";
 $result = $conn->query($sql);
 ?>
 
