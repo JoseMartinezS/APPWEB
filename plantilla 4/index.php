@@ -1,3 +1,7 @@
+<?php
+session_start();
+?>
+
 <!DOCTYPE html>
 <html lang="en">
    <head>
@@ -38,67 +42,81 @@
          <div class="loader"><img src="images/loading.gif" alt="#"/></div>
       </div>
       <!-- end loader -->
-      <header>
-         <!-- header inner -->
-         <div class="header">
-             <div class="container">
-                 <div class="row">
-                     <div class="col-md-12 col-sm-3 col logo_section">
-                         <div class="full">
-                             <div class="center-desk">
-                                 <div class="logo">
-                                     <a href="index.html"><img src="images/logo.png" alt="#" style="width: 150px; height: auto;" /></a>
-                                 </div>
-                             </div>
-                         </div>
-                     </div>
-                     <div class="col-md-10 offset-md-1">
-                         <nav class="navigation navbar navbar-expand-md navbar-dark">
-                             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                                 <span class="navbar-toggler-icon"></span>
-                             </button>
-                             <div class="collapse navbar-collapse" id="navbarsExample04">
-                                 <ul class="navbar-nav mr-auto">
-                                     <li class="nav-item active">
-                                         <a class="nav-link" href="index.html">Inicio</a>
-                                     </li>
-                                     <li class="nav-item">
-                                         <a class="nav-link" href="#about">Acerca</a>
-                                     </li>
-                                     <li class="nav-item">
-                                         <a class="nav-link" href="#valores">Valores</a>
-                                     </li>
-                                     <li class="nav-item">
-                                         <a class="nav-link" href="#productos">Productos</a>
-                                     </li>
-                                     <li class="nav-item">
-                                         <a class="nav-link" href="#testimonial">Testimonial</a>
-                                     </li>
-                                     <li class="nav-item">
-                                         <a class="nav-link btn btn-primary" href="test.php">Contact Us</a>
-                                     </li>
-                                 </ul>
-                                 <div class="navbar-icons"> <!-- Contenedor de los íconos -->
-                                     <a class="nav-link" href="Iniciosesion.php" style="color: rgb(10, 10, 10);" title="Login">
-                                         <i class="fa fa-user" aria-hidden="true"></i>
-                                     </a>
-                                     <a class="nav-link" href="TABLAPRODUCTOS/RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
-                                         <i class="fa fa-plus" aria-hidden="true"></i>
-                                     </a>
-                                     <a class="nav-link" href="TABLAPRODUCTOS/MostrarProductosEliminar.php" style="color: rgb(8, 8, 8);" title="Eliminar Producto"> <!-- Agregado -->
-                                       <i class="fa fa-pencil" aria-hidden="true"></i> <!-- Ícono de basura -->
+    <!-- loader -->
+    <div class="loader_bg">
+        <div class="loader"><img src="images/loading.gif" alt="#"/></div>
+    </div>
+    <!-- end loader -->
+    <header>
+        <!-- header inner -->
+        <div class="header">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 col-sm-3 col logo_section">
+                        <div class="full">
+                            <div class="center-desk">
+                                <div class="logo">
+                                    <a href="index.html"><img src="images/logo.png" alt="#" style="width: 150px; height: auto;" /></a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 offset-md-1">
+                        <nav class="navigation navbar navbar-expand-md navbar-dark">
+                            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                                <span class="navbar-toggler-icon"></span>
+                            </button>
+                            <div class="collapse navbar-collapse" id="navbarsExample04">
+                                <ul class="navbar-nav mr-auto">
+                                    <li class="nav-item active">
+                                        <a class="nav-link" href="index.php">Inicio</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="about.php">Acerca</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="valores.php">Valores</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="productos.php">Productos</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="proceso.php">Proceso</a>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="contactanos.php">Contactanos</a>
+                                    </li>
+                                </ul>
+                                <div class="navbar-icons">
+                                    <?php if (isset($_SESSION['usuario'])): ?>
+                                        <span class="nav-link" style="color: rgb(10, 10, 10);" title="Usuario"><?php echo $_SESSION['usuario']; ?></span>
+                                        <a class="nav-link" href="logout.php" style="color: rgb(10, 10, 10);" title="Cerrar Sesión">
+                                            <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                        </a>
+                                        <?php if ($_SESSION['is_admin']): ?>
+                                            <a class="nav-link" href="TABLAPRODUCTOS/RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
+                                                <i class="fa fa-plus" aria-hidden="true"></i>
+                                            </a>
+                                            <a class="nav-link" href="TABLAPRODUCTOS/MostrarProductosEliminar.php" style="color: rgb(8, 8, 8);" title="Eliminar Producto">
+                                                <i class="fa fa-pencil" aria-hidden="true"></i>
+                                            </a>
+                                        <?php endif; ?>
+                                    <?php else: ?>
+                                        <a class="nav-link" href="Iniciosesion.php" style="color: rgb(10, 10, 10);" title="Login">
+                                            <i class="fa fa-user" aria-hidden="true"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                    <a class="nav-link" href="TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
+                                        <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                     </a>
-                                     <a class="nav-link" href="TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
-                                         <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                     </a>
-                                 </div>
-                             </div>
-                         </nav>
-                     </div>
-                 </div>
-             </div>
-         </div>
-     </header>
+                                </div>
+                            </div>
+                        </nav>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
      
       <!-- end header inner -->
       <!-- end header -->

@@ -16,6 +16,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo 'Por favor, completa todos los campos obligatorios.';
         exit;
     }
+    
 
     $mail = new PHPMailer(true);
     
