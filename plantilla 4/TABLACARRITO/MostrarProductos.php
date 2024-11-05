@@ -183,7 +183,7 @@ session_start();
                                             </a>
                                         <?php endif; ?>
                                     <?php else: ?>
-                                        <a class="nav-link" href="Iniciosesion.php" style="color: rgb(10, 10, 10);" title="Login">
+                                        <a class="nav-link" href="../Iniciosesion.php" style="color: rgb(10, 10, 10);" title="Login">
                                             <i class="fa fa-user" aria-hidden="true"></i>
                                         </a>
                                     <?php endif; ?>
@@ -197,7 +197,7 @@ session_start();
                 </div>
             </div>
         </div>
-    </header>
+</header>
 
 <!-- Contenedor del carrito -->
 <div class="container mt-4">
@@ -207,6 +207,9 @@ session_start();
             <li class="list-group-item">No hay productos en el carrito</li>
         </ul>
         <p class="mt-2">Total: $<span id="cart-total">0</span></p>
+
+        <button id="checkout-button" class="btn btn-success mt-3" onclick="window.location.href='../PAGO/pago.php'">Comprar</button>
+
     </div>
 
     <div class="row">

@@ -1,16 +1,7 @@
 <?php
-$servername = "localhost";
-$username = "root"; 
-$contrasena = "Chicharit1245";   
-$dbname = "tienda_carrito"; 
+require 'vendor/autoload.php';
 
-// Crear conexión
-$conn = new mysqli($servername, $username, $contrasena, $dbname);
+use Openpay\Data\Openpay;
 
-// Comprobar conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
-echo "Conexión exitosa";
-$conn->close();
-?>
+$openpay = Openpay::getInstance('mesi0huf4n1qrc3uvluo', 'sk_354e89d2b4ff48e48e01af84a0da38de', 'MX', false);
+echo "SDK de OpenPay instalado correctamente!";
