@@ -184,7 +184,7 @@ session_start();
                                             <a class="nav-link" href="../TABLAPRODUCTOS/RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                             </a>
-                                            <a class="nav-link" href="TABLAPRODUCTOS/MostrarProductosEliminar.php" style="color: rgb(8, 8, 8);" title="Eliminar Producto">
+                                            <a class="nav-link" href="MostrarProductosEliminar.php" style="color: rgb(8, 8, 8);" title="Eliminar Producto">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                                             </a>
                                         <?php endif; ?>

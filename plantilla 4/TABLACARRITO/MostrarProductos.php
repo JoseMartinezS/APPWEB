@@ -1,6 +1,13 @@
 <?php
+if (session_status() === PHP_SESSION_NONE) {
+    session_start();
+}
+
 // Conexión a la base de datos
-require_once('../config.inc.php');
+$servername = "localhost";
+$username = "root";
+$password = "Chicharit1245";
+$dbname = "tienda_carrito";
 
 // Crear conexión
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -10,14 +17,29 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 }
 
-// Consulta para obtener los productos
-$sql = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos WHERE status = 1";
-$result = $conn->query($sql);
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['usuario_id'])) {
+    die('Usuario no autenticado.');
+}
+
+$usuario_id = $_SESSION['usuario_id'];
+
+// Consulta para obtener los productos disponibles 
+$sql_productos = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos WHERE status = 1"; 
+$result_productos = $conn->query($sql_productos);
+
+// Consulta para obtener los productos del carrito 
+$sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.id_producto 
+FROM detalle_carrito dc JOIN productos p 
+ON dc.id_producto = p.id_producto JOIN carrito c 
+ON dc.id_carrito = c.id_carrito WHERE c.id_usuario = ?"; 
+$stmt_carrito = $conn->prepare($sql_carrito); 
+$stmt_carrito->bind_param("i", $usuario_id); 
+$stmt_carrito->execute(); 
+$result_carrito = $stmt_carrito->get_result(); 
+$total = 0;
 ?>
 
-<?php
-session_start();
-?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -175,10 +197,10 @@ session_start();
                                             <i class="fa fa-sign-out" aria-hidden="true"></i>
                                         </a>
                                         <?php if ($_SESSION['is_admin']): ?>
-                                            <a class="nav-link" href="TABLAPRODUCTOS/RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
+                                            <a class="nav-link" href="../TABLAPRODUCTOS/RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
                                                 <i class="fa fa-plus" aria-hidden="true"></i>
                                             </a>
-                                            <a class="nav-link" href="TABLAPRODUCTOS/MostrarProductosEliminar.php" style="color: rgb(8, 8, 8);" title="Eliminar Producto">
+                                            <a class="nav-link" href="../TABLAPRODUCTOS/MostrarProductosEliminar.php" style="color: rgb(8, 8, 8);" title="Eliminar Producto">
                                                 <i class="fa fa-pencil" aria-hidden="true"></i>
                                             </a>
                                         <?php endif; ?>
@@ -199,43 +221,49 @@ session_start();
         </div>
 </header>
 
-<!-- Contenedor del carrito -->
-<div class="container mt-4">
-    <div id="cart">
-        <h5>Carrito de compras</h5>
-        <ul id="cart-items" class="list-group">
-            <li class="list-group-item">No hay productos en el carrito</li>
-        </ul>
-        <p class="mt-2">Total: $<span id="cart-total">0</span></p>
+<!-- Contenedor del carrito --> 
+ <div class="container mt-4"> 
+    <div id="cart"> 
+        <h5>Carrito de compras</h5> 
+        <ul id="cart-items" class="list-group"> 
+            <?php if ($result_carrito->num_rows > 0): ?>
+                 <?php while ($row = $result_carrito->fetch_assoc()):
+                     ?> <li class="list-group-item"> 
+                        <?php echo htmlspecialchars($row['nombre']); ?> - $<?php echo number_format($row['precio'], 2); ?> x <?php echo $row['cantidad']; ?> 
+                        <?php $total += $row['precio'] * $row['cantidad']; ?>
+                     </li> 
+                    <?php endwhile; ?> 
+                        <?php else: ?>
+                         <li class="list-group-item">No hay productos en el carrito</li> 
+                        <?php endif; ?> 
+                    </ul> <p class="mt-2">Total: $<span id="cart-total"><?php echo number_format($total, 2); ?></span></p> 
+                    <button id="checkout-button" class="btn btn-success mt-3" onclick="window.location.href='../PAGO/pago.php'">Comprar</button> 
+                </div> 
+                
+            <div class="row"> 
+                <?php if 
+                ($result_productos->num_rows > 0) { 
+                while($row = $result_productos->fetch_assoc()) { 
+                    $image_path = '../' . $row["imagen"]; 
+                    echo '<div class="col-3">';
+                    echo '<div class="card">'; 
+                    echo '<img src="' . htmlspecialchars($image_path) . '" class="card-img-top" alt="' . htmlspecialchars($row["nombre"]) . '">'; 
+                    echo '<div class="card-body">'; 
+                    echo '<h5 class="card-title">' . htmlspecialchars($row["nombre"]) . '</h5>'; 
+                    echo '<p class="card-text">' . htmlspecialchars($row["descripcion"]) . '</p>'; 
+                    echo '<p class="card-text">Precio: $' . $row["precio"] . '</p>'; 
+                    echo '<form action="agregar_al_carrito.php" method="post">'; 
+                    echo '<input type="hidden" name="producto_id" value="' . $row["id_producto"] . '">'; 
+                    echo '<input type="number" class="form-control mb-2" name="cantidad" value="1" min="1">'; 
+                    echo '<button type="submit" class="btn btn-primary">Agregar al Carrito</button>'; 
+                    echo '</form>'; 
+                    echo '</div>'; 
+                    echo '</div>'; 
+                    echo '</div>'; 
+                    } 
+                } else { 
+                    echo '<p>No hay productos disponibles.</p>'; } ?> </div>
 
-        <button id="checkout-button" class="btn btn-success mt-3" onclick="window.location.href='../PAGO/pago.php'">Comprar</button>
-
-    </div>
-
-    <div class="row">
-        <?php
-        if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-                $image_path = '../' . $row["imagen"];
-                echo '<div class="col-3">';
-                echo '<div class="card">';
-                echo '<img src="' . htmlspecialchars($image_path) . '" class="card-img-top" alt="' . htmlspecialchars($row["nombre"]) . '">';
-                echo '<div class="card-body">';
-                echo '<h5 class="card-title">' . htmlspecialchars($row["nombre"]) . '</h5>';
-                echo '<p class="card-text">' . htmlspecialchars($row["descripcion"]) . '</p>';
-                echo '<p class="card-text">Precio: $' . $row["precio"] . '</p>';
-                // Aquí añadimos el atributo data-weight
-                echo '<input type="number" class="form-control mb-2 product-quantity" value="1" min="1" data-id="' . $row["id_producto"] . '" data-name="' . htmlspecialchars($row["nombre"]) . '" data-price="' . $row["precio"] . '" data-weight="' . $row["peso"] . '" data-image="' . htmlspecialchars($image_path) . '" data-description="' . htmlspecialchars($row["descripcion"]) . '">';
-                echo '<button class="btn btn-primary add-to-cart" data-id="' . $row["id_producto"] . '" data-name="' . htmlspecialchars($row["nombre"]) . '" data-price="' . $row["precio"] . '">Agregar al Carrito</button>';
-                echo '</div>';
-                echo '</div>';
-                echo '</div>';
-            }
-        } else {
-            echo '<p>No hay productos disponibles.</p>';
-        }
-        $conn->close();
-        ?>
     </div>
 </div>
 
@@ -363,3 +391,6 @@ session_start();
 
 </body>
 </html>
+$stmt_carrito->close();
+$conn->close();
+?>

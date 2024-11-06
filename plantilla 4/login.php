@@ -30,6 +30,7 @@ if ($result->num_rows === 1) {
     $user = $result->fetch_assoc();
     // Verificar la contraseña hasheada
     if (password_verify($contrasena, $user['contrasena'])) {
+        $_SESSION['usuario_id'] = $user['id_usuario']; // Asegúrate de establecer el ID del usuario en la sesión
         $_SESSION['usuario'] = $user['nombre']; // Usar el nombre del usuario
         $_SESSION['correo'] = $user['correo']; // Guardar el correo del usuario
         $_SESSION['is_admin'] = $user['is_admin']; // Verificar si es administrador
