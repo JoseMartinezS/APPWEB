@@ -28,16 +28,17 @@ $usuario_id = $_SESSION['usuario_id'];
 $sql_productos = "SELECT id_producto, nombre, descripcion, precio, imagen, peso FROM productos WHERE status = 1"; 
 $result_productos = $conn->query($sql_productos);
 
-// Consulta para obtener los productos del carrito 
-$sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.id_producto 
-FROM detalle_carrito dc JOIN productos p 
-ON dc.id_producto = p.id_producto JOIN carrito c 
-ON dc.id_carrito = c.id_carrito WHERE c.id_usuario = ?"; 
-$stmt_carrito = $conn->prepare($sql_carrito); 
-$stmt_carrito->bind_param("i", $usuario_id); 
-$stmt_carrito->execute(); 
-$result_carrito = $stmt_carrito->get_result(); 
+$sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.id_producto, p.imagen 
+                FROM detalle_carrito dc 
+                JOIN productos p ON dc.id_producto = p.id_producto 
+                JOIN carrito c ON dc.id_carrito = c.id_carrito 
+                WHERE c.id_usuario = ?";
+$stmt_carrito = $conn->prepare($sql_carrito);
+$stmt_carrito->bind_param("i", $usuario_id);
+$stmt_carrito->execute();
+$result_carrito = $stmt_carrito->get_result();
 $total = 0;
+
 ?>
 
 <!DOCTYPE html>
@@ -221,176 +222,128 @@ $total = 0;
         </div>
 </header>
 
-<!-- Contenedor del carrito --> 
- <div class="container mt-4"> 
+<!-- Contenedor del carrito -->
+<div class="container mt-4"> 
     <div id="cart"> 
-        <h5>Carrito de compras</h5> 
+        <h5>Carrito de compras</h5>
         <ul id="cart-items" class="list-group"> 
-            <?php if ($result_carrito->num_rows > 0): ?>
-                 <?php while ($row = $result_carrito->fetch_assoc()):
-                     ?> <li class="list-group-item"> 
-                        <?php echo htmlspecialchars($row['nombre']); ?> - $<?php echo number_format($row['precio'], 2); ?> x <?php echo $row['cantidad']; ?> 
+            <?php
+            // Obtener productos del carrito
+            $sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.imagen, p.id_producto 
+                            FROM detalle_carrito dc 
+                            JOIN productos p ON dc.id_producto = p.id_producto 
+                            JOIN carrito c ON dc.id_carrito = c.id_carrito 
+                            WHERE c.id_usuario = ?";
+            $stmt_carrito = $conn->prepare($sql_carrito);
+            $stmt_carrito->bind_param("i", $usuario_id);
+            $stmt_carrito->execute();
+            $result_carrito = $stmt_carrito->get_result();
+            $total = 0;
+            ?>
+            
+            <?php if ($result_carrito->num_rows > 0): ?> 
+                <?php while ($row = $result_carrito->fetch_assoc()): ?>
+                    <li class="list-group-item d-flex justify-content-between align-items-center"> 
+                        <div class="cart-item d-flex align-items-center"> 
+                            <img src="<?php echo htmlspecialchars('../' . $row['imagen']); ?>" alt="<?php echo htmlspecialchars($row['nombre']); ?>" style="width: 50px; height: 50px; margin-right: 10px;"> 
+                            <?php echo htmlspecialchars($row['nombre']); ?> - $<?php echo number_format($row['precio'], 2); ?> x <?php echo $row['cantidad']; ?>
+                        </div>
+                        <button class="btn btn-danger btn-sm remove-from-cart" data-id="<?php echo $row['id_producto']; ?>" data-quantity="<?php echo $row['cantidad']; ?>" data-price="<?php echo $row['precio']; ?>">Eliminar</button>
                         <?php $total += $row['precio'] * $row['cantidad']; ?>
-                     </li> 
-                    <?php endwhile; ?> 
-                        <?php else: ?>
-                         <li class="list-group-item">No hay productos en el carrito</li> 
-                        <?php endif; ?> 
-                    </ul> <p class="mt-2">Total: $<span id="cart-total"><?php echo number_format($total, 2); ?></span></p> 
-                    <button id="checkout-button" class="btn btn-success mt-3" onclick="window.location.href='../PAGO/pago.php'">Comprar</button> 
-                </div> 
-                
-            <div class="row"> 
-                <?php if 
-                ($result_productos->num_rows > 0) { 
-                while($row = $result_productos->fetch_assoc()) { 
-                    $image_path = '../' . $row["imagen"]; 
-                    echo '<div class="col-3">';
-                    echo '<div class="card">'; 
-                    echo '<img src="' . htmlspecialchars($image_path) . '" class="card-img-top" alt="' . htmlspecialchars($row["nombre"]) . '">'; 
-                    echo '<div class="card-body">'; 
-                    echo '<h5 class="card-title">' . htmlspecialchars($row["nombre"]) . '</h5>'; 
-                    echo '<p class="card-text">' . htmlspecialchars($row["descripcion"]) . '</p>'; 
-                    echo '<p class="card-text">Precio: $' . $row["precio"] . '</p>'; 
-                    echo '<form action="agregar_al_carrito.php" method="post">'; 
-                    echo '<input type="hidden" name="producto_id" value="' . $row["id_producto"] . '">'; 
-                    echo '<input type="number" class="form-control mb-2" name="cantidad" value="1" min="1">'; 
-                    echo '<button type="submit" class="btn btn-primary">Agregar al Carrito</button>'; 
-                    echo '</form>'; 
-                    echo '</div>'; 
-                    echo '</div>'; 
-                    echo '</div>'; 
-                    } 
-                } else { 
-                    echo '<p>No hay productos disponibles.</p>'; } ?> </div>
+                    </li>
+                <?php endwhile; ?>
+            <?php else: ?> 
+                <li class="list-group-item">No hay productos en el carrito</li>
+            <?php endif; ?>
+        </ul>
+        <p class="mt-2">Total: $<span id="cart-total"><?php echo number_format($total, 2); ?></span></p>
+        <button id="checkout-button" class="btn btn-success mt-3" onclick="window.location.href='../PAGO/pago.php'">Comprar</button>
+    </div>
+    
 
+    <!--  Catalogo de productos -->
+    <div class="row mt-4"> 
+        <?php if ($result_productos->num_rows > 0) { 
+            while($row = $result_productos->fetch_assoc()) { 
+                $image_path = '../' . $row["imagen"]; 
+                echo '<div class="col-3">';
+                echo '<div class="card">'; 
+                echo '<img src="' . htmlspecialchars($image_path) . '" class="card-img-top" alt="' . htmlspecialchars($row["nombre"]) . '">'; 
+                echo '<div class="card-body">'; 
+                echo '<h5 class="card-title">' . htmlspecialchars($row["nombre"]) . '</h5>'; 
+                echo '<p class="card-text">' . htmlspecialchars($row["descripcion"]) . '</p>'; 
+                echo '<p class="card-text">Precio: $' . $row["precio"] . '</p>'; 
+                echo '<form action="agregar_al_carrito.php" method="post">'; 
+                echo '<input type="hidden" name="producto_id" value="' . $row["id_producto"] . '">'; 
+                echo '<input type="number" class="form-control mb-2" name="cantidad" value="1" min="1">'; 
+                echo '<button type="submit" class="btn btn-primary">Agregar al Carrito</button>'; 
+                echo '</form>'; 
+                echo '</div>'; 
+                echo '</div>'; 
+                echo '</div>'; 
+            } 
+        } else { 
+            echo '<p>No hay productos disponibles.</p>'; 
+        } ?> 
     </div>
 </div>
 
-<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
-<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
 <script>
-    // Manejar los productos en el carrito
-    let cart = [];
-    let cartTotal = 0;
-    let totalWeight = 0;
-
-    // Precios de los costales
-    const bagPrices = {
-        '1kg': 79,
-        '5kg': 393,
-        '10kg': 786
-    };
-
-    // Función que determina cuántos costales son necesarios según el peso total
-    function calculatePackaging(totalWeight) {
-        let cost = 0;
-
-        // Redondear hacia arriba el peso a la siguiente unidad si el decimal es mayor a 0.50
-        totalWeight = Math.ceil(totalWeight); 
-
-        // Comenzamos a restar según el peso redondeado
-        while (totalWeight > 0) {
-            if (totalWeight >= 10) {
-                cost += bagPrices['10kg'];
-                totalWeight -= 10;
-            } else if (totalWeight >= 5) {
-                cost += bagPrices['5kg'];
-                totalWeight -= 5;
-            } else if (totalWeight >= 1) {
-                cost += bagPrices['1kg'];
-                totalWeight -= 1;
-            }
-        }
-
-        return cost;
+    function updateCartTotal() {
+        let total = 0;
+        document.querySelectorAll('#cart-items .list-group-item').forEach(function(item) {
+            let price = parseFloat(item.querySelector('.cart-price').textContent.replace('$', ''));
+            let quantity = parseInt(item.querySelector('.cart-quantity').textContent);
+            total += price * quantity;
+        });
+        document.getElementById('cart-total').textContent = total.toFixed(2);
     }
 
-    // Función para actualizar el carrito en la interfaz
-    function updateCart() {
-        let cartItemsContainer = document.getElementById('cart-items');
-        let cartTotalElement = document.getElementById('cart-total');
-
-        // Limpiar la lista actual
-        cartItemsContainer.innerHTML = '';
-
-        // Si no hay productos, mostrar un mensaje
-        if (cart.length === 0) {
-            cartItemsContainer.innerHTML = '<li class="list-group-item">No hay productos en el carrito</li>';
-        } else {
-            // Mostrar los productos en el carrito
-            cart.forEach(function(item) {
-                let listItem = document.createElement('li');
-                listItem.classList.add('list-group-item');
-
-                // Crear contenido del producto (imagen + detalles)
-                listItem.innerHTML = `
-                    <div class="cart-item">
-                        <img src="${item.image}" alt="${item.name}" style="width: 50px; height: 50px;">
-                        <div class="cart-details">
-                            <strong>${item.name}</strong>
-                            <p>${item.description}</p>
-                            <p>Peso: ${item.weight}kg</p>
-                        </div>
-                        <span class="cart-price">$${item.price}</span>
-                    </div>
-                `;
-                cartItemsContainer.appendChild(listItem);
-            });
-        }
-
-        // Calcular el costo de los costales según el peso total de los productos
-        let packagingCost = calculatePackaging(totalWeight);
-
-        // Actualizar el total del carrito sumando el costo de los productos y el embalaje
-        let totalCost = cartTotal + packagingCost;
-        cartTotalElement.innerText = totalCost.toFixed(2);
-    }
-
-    // Manejar el evento de añadir productos al carrito
-    document.querySelectorAll('.add-to-cart').forEach(function(button) {
+    document.querySelectorAll('.remove-from-cart').forEach(function(button) {
         button.addEventListener('click', function() {
             let productId = this.getAttribute('data-id');
-            let productName = this.getAttribute('data-name');
-            let productPrice = parseFloat(this.getAttribute('data-price'));
-            let productWeight = parseFloat(this.previousElementSibling.getAttribute('data-weight'));
-            let productImage = this.previousElementSibling.getAttribute('data-image');
-            let productDescription = this.previousElementSibling.getAttribute('data-description');
+            let quantity = parseInt(this.getAttribute('data-quantity'));
+            let price = parseFloat(this.getAttribute('data-price'));
 
-            // Obtener la cantidad seleccionada para este producto
-            let quantityInput = this.previousElementSibling; 
-            let quantity = parseInt(quantityInput.value);
-
-            // Añadir la cantidad seleccionada al carrito
-            for (let i = 0; i < quantity; i++) {
-                cart.push({
-                    id: productId, 
-                    name: productName, 
-                    price: productPrice, 
-                    weight: productWeight, 
-                    image: productImage, 
-                    description: productDescription 
-                });
-            }
-
-            // Sumar el peso total de los productos agregados
-            totalWeight += productWeight * quantity;
-
-            // Sumar el total según la cantidad seleccionada
-            cartTotal += productPrice * quantity;
-
-            // Actualizar la vista del carrito
-            updateCart();
+            // Hacer una solicitud para eliminar el producto de la base de datos
+            fetch('eliminar_del_carrito.php', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    productId: productId
+                })
+            }).then(response => response.json()).then(data => {
+                if (data.success) {
+                    // Remover el elemento de la lista del carrito
+                    this.closest('li').remove();
+                    // Actualizar el total del carrito
+                    let currentTotal = parseFloat(document.getElementById('cart-total').textContent);
+                    let amountToDeduct = price * quantity;
+                    document.getElementById('cart-total').textContent = (currentTotal - amountToDeduct).toFixed(2);
+                } else {
+                    alert('Error al eliminar el producto del carrito.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+            });
         });
     });
 </script>
 
 
 
+
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
+
+
+
+
 </body>
 </html>
-$stmt_carrito->close();
-$conn->close();
-?>
+

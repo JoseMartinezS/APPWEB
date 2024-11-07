@@ -15,6 +15,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $cantidad = $_POST['cantidad'];
     $usuario_id = $_SESSION['usuario_id'];
 
+    // Obtener el ID del carrito del usuario o crearlo si no existe
     $sql = "SELECT id_carrito FROM carrito WHERE id_usuario = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $usuario_id);
@@ -31,7 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $carrito_id = $stmt->insert_id;
     }
 
-    $sql = "SELECT nombre, precio, descripcion, imagen FROM productos WHERE id_producto = ?";
+    // Obtener el precio del producto
+    $sql = "SELECT precio FROM productos WHERE id_producto = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $producto_id);
     $stmt->execute();
@@ -39,6 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $producto = $result->fetch_assoc();
     $precio_unitario = $producto['precio'];
 
+    // Insertar o actualizar el producto en detalle_carrito
     $sql = "INSERT INTO detalle_carrito (id_carrito, id_producto, cantidad, precio_unitario) 
             VALUES (?, ?, ?, ?) 
             ON DUPLICATE KEY UPDATE cantidad = cantidad + VALUES(cantidad)";
@@ -51,26 +54,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Error al agregar el producto al carrito en la base de datos.";
     }
 
-    if (!isset($_SESSION['carrito'])) {
-        $_SESSION['carrito'] = array();
-    }
+    $stmt->close();
+    $conn->close();
 
-    $producto['id_producto'] = $producto_id;
-    $producto['cantidad'] = $cantidad;
-
-    $producto_encontrado = false;
-    foreach ($_SESSION['carrito'] as &$item) {
-        if ($item['id_producto'] == $producto_id) {
-            $item['cantidad'] += $cantidad;
-            $producto_encontrado = true;
-            break;
-        }
-    }
-
-    if (!$producto_encontrado) {
-        $_SESSION['carrito'][] = $producto;
-    }
-
+    // Redirigir de vuelta a la página de productos o carrito
     header('Location: MostrarProductos.php');
     exit;
 }
