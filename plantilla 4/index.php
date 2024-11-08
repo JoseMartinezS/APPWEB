@@ -484,69 +484,69 @@ session_start();
       <div class="progress"></div>
   </div>
 
-   <!-- Sección 1 del diagrama -->
+   <!-- Sección INICIO del diagrama -->
    <div class="diagram-section active" id="section-1">
-       <h3>Paso 1: Recolección.</h3>
+       <h3>PROCESO DE ELABORACION.</h3>
        <img src="images/Diagrama Completo.jpeg" alt="Paso 1 del proceso">
    </div>
 
-   <!-- Sección 2 del diagrama -->
+   <!-- Sección 1 del diagrama -->
    <div class="diagram-section" id="section-2">
-       <h3>Paso 2 y 3: Transporte, Limpieza y Conducción.</h3>
+       <h3>Paso 1: RECOLECCION.</h3>
        <img src="images/PASO1.jpeg" alt="Paso 2 del proceso">
    </div>
 
-   <!-- Sección 3 del diagrama -->
+   <!-- Sección 2 del diagrama -->
    <div class="diagram-section" id="section-3">
-       <h3>Paso 4 y 5: Tratamiento Químico y Tratamiento Térmico.</h3>
+       <h3>Paso 2; TRANSPORTE.</h3>
        <img src="images/PASO2.jpeg" alt="Paso 3 del proceso">
    </div>
 
-   <!-- Sección 4 del diagrama -->
+   <!-- Sección 3 del diagrama -->
    <div class="diagram-section" id="section-4">
-      <h3>Paso 6: Proceso de Trituración.</h3>
+      <h3>Paso 3: LIMPIEZA Y SELECCION.</h3>
       <img src="images/PASO3.jpeg" alt="Paso 6 del proceso">
    </div>
 
-   <!-- Sección 5 del diagrama -->
+   <!-- Sección 4 del diagrama -->
    <div class="diagram-section" id="section-5">
-       <h3>Paso 7 y 8: Vertido en Moldes y Secado al Sol.</h3>
+       <h3>Paso 4: TRATAMIENTO TERMICO.</h3>
        <img src="images/PASO4.jpeg" alt="Paso 7 y 8 del proceso">
    </div>
 
-   <!-- Sección 6 del diagrama -->
+   <!-- Sección 5 del diagrama -->
    <div class="diagram-section" id="section-6">
-       <h3>Paso 9 y 10: Desmolde y Empaquetado.</h3>
+       <h3>Paso 5: TRATAMIENTO QUIMICO.</h3>
        <img src="images/PASO5.jpeg" alt="Paso 9 y 10 del proceso">
    </div>
 
    <!-- Sección 6 del diagrama -->
    <div class="diagram-section" id="section-7">
-      <h3>Paso 9 y 10: Desmolde y Empaquetado.</h3>
+      <h3>Paso 6: PROCESO DE TRITURACION.</h3>
       <img src="images/PASO6.jpeg" alt="Paso 9 y 10 del proceso">
   </div>
 
-   <!-- Sección 6 del diagrama -->
+   <!-- Sección 7 del diagrama -->
    <div class="diagram-section" id="section-8">
-      <h3>Paso 9 y 10: Desmolde y Empaquetado.</h3>
+      <h3>Paso PASO 7: VERTIDO EN MOLDES.</h3>
       <img src="images/PASO7.jpeg" alt="Paso 9 y 10 del proceso">
    </div>
 
-   <!-- Sección 6 del diagrama -->
+   <!-- Sección 8 del diagrama -->
    <div class="diagram-section" id="section-9">
-      <h3>Paso 9 y 10: Desmolde y Empaquetado.</h3>
+      <h3>Paso 8: SECADO AL SOL.</h3>
       <img src="images/PASO8.jpeg" alt="Paso 9 y 10 del proceso">
    </div>
 
-   <!-- Sección 6 del diagrama -->
+   <!-- Sección 9 del diagrama -->
    <div class="diagram-section" id="section-10">
-      <h3>Paso 9 y 10: Desmolde y Empaquetado.</h3>
+      <h3>Paso 9: DESMOLDE.</h3>
       <img src="images/PASO9.jpeg" alt="Paso 9 y 10 del proceso">
    </div>
 
-   <!-- Sección 6 del diagrama -->
+   <!-- Sección 10 del diagrama -->
    <div class="diagram-section" id="section-11">
-      <h3>Paso 9 y 10: Desmolde y Empaquetado.</h3>
+      <h3>Paso 10: EMPAQUETADO.</h3>
       <img src="images/PASO10.jpeg" alt="Paso 9 y 10 del proceso">
    </div>
 

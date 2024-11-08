@@ -229,7 +229,7 @@ $total = 0;
         <ul id="cart-items" class="list-group"> 
             <?php
             // Obtener productos del carrito
-            $sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.imagen, p.id_producto 
+            $sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.imagen, p.id_producto, dc.costo_embalaje 
                             FROM detalle_carrito dc 
                             JOIN productos p ON dc.id_producto = p.id_producto 
                             JOIN carrito c ON dc.id_carrito = c.id_carrito 
@@ -239,6 +239,7 @@ $total = 0;
             $stmt_carrito->execute();
             $result_carrito = $stmt_carrito->get_result();
             $total = 0;
+            $total_embalaje = 0;
             ?>
             
             <?php if ($result_carrito->num_rows > 0): ?> 
@@ -247,9 +248,13 @@ $total = 0;
                         <div class="cart-item d-flex align-items-center"> 
                             <img src="<?php echo htmlspecialchars('../' . $row['imagen']); ?>" alt="<?php echo htmlspecialchars($row['nombre']); ?>" style="width: 50px; height: 50px; margin-right: 10px;"> 
                             <?php echo htmlspecialchars($row['nombre']); ?> - $<?php echo number_format($row['precio'], 2); ?> x <?php echo $row['cantidad']; ?>
+                            <br><small>Costo de embalaje: $<?php echo number_format($row['costo_embalaje'], 2); ?></small>
                         </div>
                         <button class="btn btn-danger btn-sm remove-from-cart" data-id="<?php echo $row['id_producto']; ?>" data-quantity="<?php echo $row['cantidad']; ?>" data-price="<?php echo $row['precio']; ?>">Eliminar</button>
-                        <?php $total += $row['precio'] * $row['cantidad']; ?>
+                        <?php 
+                            $total += $row['precio'] * $row['cantidad']; 
+                            $total_embalaje += $row['costo_embalaje'];
+                        ?>
                     </li>
                 <?php endwhile; ?>
             <?php else: ?> 
@@ -257,9 +262,10 @@ $total = 0;
             <?php endif; ?>
         </ul>
         <p class="mt-2">Total: $<span id="cart-total"><?php echo number_format($total, 2); ?></span></p>
+        <p class="mt-2">Total Costo de Embalaje: $<span id="packaging-cost"><?php echo number_format($total_embalaje, 2); ?></span></p>
+        <p class="mt-2">Gran Total: $<span id="grand-total"><?php echo number_format($total + $total_embalaje, 2); ?></span></p>
         <button id="checkout-button" class="btn btn-success mt-3" onclick="window.location.href='../PAGO/pago.php'">Comprar</button>
     </div>
-    
 
     <!--  Catalogo de productos -->
     <div class="row mt-4"> 
@@ -290,59 +296,72 @@ $total = 0;
 
 
 <script>
-    function updateCartTotal() {
-        let total = 0;
-        document.querySelectorAll('#cart-items .list-group-item').forEach(function(item) {
-            let price = parseFloat(item.querySelector('.cart-price').textContent.replace('$', ''));
-            let quantity = parseInt(item.querySelector('.cart-quantity').textContent);
-            total += price * quantity;
-        });
-        document.getElementById('cart-total').textContent = total.toFixed(2);
-    }
+    // Función para actualizar el total del carrito, costo de embalaje y gran total
+function updateCartTotal() {
+    let total = 0;
+    let totalPackagingCost = 0;
 
-    document.querySelectorAll('.remove-from-cart').forEach(function(button) {
-        button.addEventListener('click', function() {
-            let productId = this.getAttribute('data-id');
-            let quantity = parseInt(this.getAttribute('data-quantity'));
-            let price = parseFloat(this.getAttribute('data-price'));
+    document.querySelectorAll('#cart-items .list-group-item').forEach(function(item) {
+        // Obtén el precio y la cantidad del producto
+        let price = parseFloat(item.querySelector('.cart-item').textContent.match(/\$(\d+(\.\d{2})?)/)[1]);
+        let quantity = parseInt(item.querySelector('.cart-item').textContent.match(/x\s(\d+)/)[1]);
+        
+        // Calcula el subtotal de cada producto y suma al total
+        total += price * quantity;
 
-            // Hacer una solicitud para eliminar el producto de la base de datos
-            fetch('eliminar_del_carrito.php', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify({
-                    productId: productId
-                })
-            }).then(response => response.json()).then(data => {
-                if (data.success) {
-                    // Remover el elemento de la lista del carrito
-                    this.closest('li').remove();
-                    // Actualizar el total del carrito
-                    let currentTotal = parseFloat(document.getElementById('cart-total').textContent);
-                    let amountToDeduct = price * quantity;
-                    document.getElementById('cart-total').textContent = (currentTotal - amountToDeduct).toFixed(2);
-                } else {
-                    alert('Error al eliminar el producto del carrito.');
-                }
-            }).catch(error => {
-                console.error('Error:', error);
-            });
+        // Obtén el costo de embalaje y suma al total de embalaje
+        let packagingCost = parseFloat(item.querySelector('.cart-item small').textContent.match(/\$(\d+(\.\d{2})?)/)[1]);
+        totalPackagingCost += packagingCost;
+    });
+
+    // Actualizar el total del carrito
+    document.getElementById('cart-total').textContent = total.toFixed(2);
+
+    // Actualizar el total del costo de embalaje
+    document.getElementById('packaging-cost').textContent = totalPackagingCost.toFixed(2);
+
+    // Calcular y actualizar el Gran Total
+    let grandTotal = total + totalPackagingCost;
+    document.getElementById('grand-total').textContent = grandTotal.toFixed(2);
+}
+
+// Lógica de eliminación del carrito con actualización de costos
+document.querySelectorAll('.remove-from-cart').forEach(function(button) {
+    button.addEventListener('click', function() {
+        let productId = this.getAttribute('data-id');
+        let quantity = parseInt(this.getAttribute('data-quantity'));
+        let price = parseFloat(this.getAttribute('data-price'));
+
+        // Hacer una solicitud para eliminar el producto de la base de datos
+        fetch('eliminar_del_carrito.php', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({
+                productId: productId
+            })
+        }).then(response => response.json()).then(data => {
+            if (data.success) {
+                // Remover el elemento de la lista del carrito
+                this.closest('li').remove();
+                
+                // Actualizar el total del carrito y los costos relacionados
+                updateCartTotal();
+            } else {
+                alert('Error al eliminar el producto del carrito.');
+            }
+        }).catch(error => {
+            console.error('Error:', error);
         });
     });
+});
+
 </script>
-
-
-
 
 <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.3/dist/umd/popper.min.js"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
-
-
-
-
 
 </body>
 </html>
