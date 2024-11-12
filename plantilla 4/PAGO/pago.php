@@ -1,3 +1,51 @@
+<?php
+session_start();
+
+// Conexión a la base de datos
+$servername = "localhost";
+$username = "root";
+$password = "Chicharit1245";
+$dbname = "tienda_carrito";
+
+// Crear conexión
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+// Comprobar la conexión
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+}
+
+// Verificar si el usuario está autenticado
+if (!isset($_SESSION['usuario_id'])) {
+    die('Usuario no autenticado.');
+}
+
+$usuario_id = $_SESSION['usuario_id'];
+
+// Consulta para obtener los productos en el carrito
+$sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.imagen, dc.costo_embalaje 
+                FROM detalle_carrito dc 
+                JOIN productos p ON dc.id_producto = p.id_producto 
+                JOIN carrito c ON dc.id_carrito = c.id_carrito 
+                WHERE c.id_usuario = ?";
+$stmt_carrito = $conn->prepare($sql_carrito);
+$stmt_carrito->bind_param("i", $usuario_id);
+$stmt_carrito->execute();
+$result_carrito = $stmt_carrito->get_result();
+
+// Variables para el total y el costo de embalaje
+$total = 0;
+$total_embalaje = 0;
+$productosCarrito = [];
+
+// Procesar los resultados
+while ($row = $result_carrito->fetch_assoc()) {
+    $productosCarrito[] = $row;
+    $total += $row['precio'] * $row['cantidad'];
+    $total_embalaje += $row['costo_embalaje'];
+}
+?>
+
 <!DOCTYPE html>
 <html>
 <head>
@@ -59,9 +107,36 @@
         }
 
         .product-item {
+            display: flex;
+            align-items: center;
             margin-bottom: 10px;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+        }
+
+        .product-item img {
+            border-radius: 5px;
+            width: 50px;
+            height: 50px;
+            margin-right: 10px;
+        }
+
+        .product-item p {
+            margin: 0;
+        }
+
+        .product-summary {
+            max-width: 400px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        .product-summary h2 {
+            text-align: center;
+        }
+        .product-summary p.total {
+            font-weight: bold;
+            margin-top: 15px;
+            text-align: right;
         }
 
         /* Botón de pago */
@@ -80,130 +155,89 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div class="container" id="clienteForm">
         <!-- Columna Izquierda (Formulario de Pago) -->
         <div class="column">
-            <h2>Formulario de Pago</h2>
-            <form action="procesar_pago.php" method="post">
-                <!-- País o Región -->
-                <div class="form-group">
-                    <label>País o Región</label>
-                    <select name="pais" required>
-                        <option value="mexico">México</option>
-                    </select>
-                </div>
-
-                <!-- Nombre y Apellidos -->
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" name="nombre" required>
-                </div>
-                <div class="form-group">
-                    <label>Apellidos</label>
-                    <input type="text" name="apellidos" required>
-                </div>
-
-                <!-- Empresa (Opcional) -->
-                <div class="form-group">
-                    <label>Empresa (opcional)</label>
-                    <input type="text" name="empresa">
-                </div>
-
-                <!-- Dirección -->
-                <div class="form-group">
-                    <label>Dirección</label>
-                    <input type="text" name="direccion" required>
-                </div>
-
-                <!-- Descripción de la casa -->
-                <div class="form-group">
-                    <label>Descripción de la casa</label>
-                    <input type="text" name="descripcion_casa">
-                </div>
-
-                <!-- Código Postal -->
-                <div class="form-group">
-                    <label>Código Postal</label>
-                    <input type="text" name="codigo_postal" required>
-                </div>
-
-                <!-- Ciudad -->
-                <div class="form-group">
-                    <label>Ciudad</label>
-                    <input type="text" name="ciudad" required>
-                </div>
-
-                <!-- Estado -->
-                <div class="form-group">
-                    <label>Estado</label>
-                    <select name="estado" required>
-                        <option value="aguascalientes">Aguascalientes</option>
-                        <option value="baja_california">Baja California</option>
-                        <option value="baja_california_sur">Baja California Sur</option>
-                        <option value="campeche">Campeche</option>
-                        <option value="chiapas">Chiapas</option>
-                        <option value="chihuahua">Chihuahua</option>
-                        <option value="coahuila">Coahuila</option>
-                        <option value="colima">Colima</option>
-                        <option value="cdmx">Ciudad de México</option>
-                        <option value="durango">Durango</option>
-                        <option value="guanajuato">Guanajuato</option>
-                        <option value="guerrero">Guerrero</option>
-                        <option value="hidalgo">Hidalgo</option>
-                        <option value="jalisco">Jalisco</option>
-                        <option value="mexico">México</option>
-                        <option value="michoacan">Michoacán</option>
-                        <option value="morelos">Morelos</option>
-                        <option value="nayarit">Nayarit</option>
-                        <option value="nuevo_leon">Nuevo León</option>
-                        <option value="oaxaca">Oaxaca</option>
-                        <option value="puebla">Puebla</option>
-                        <option value="queretaro">Querétaro</option>
-                        <option value="quintana_roo">Quintana Roo</option>
-                        <option value="san_luis_potosi">San Luis Potosí</option>
-                        <option value="sinaloa">Sinaloa</option>
-                        <option value="sonora">Sonora</option>
-                        <option value="tabasco">Tabasco</option>
-                        <option value="tamaulipas">Tamaulipas</option>
-                        <option value="tlaxcala">Tlaxcala</option>
-                        <option value="veracruz">Veracruz</option>
-                        <option value="yucatan">Yucatán</option>
-                        <option value="zacatecas">Zacatecas</option>
-                    </select>
-                </div>
-
-                <!-- Teléfono -->
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="text" name="telefono" required>
-                </div>
-
-                <!-- Guardar información -->
-                <div class="form-group save-info">
-                    <input type="checkbox" name="guardar_info" id="guardar_info">
-                    <label for="guardar_info">Guardar esta información para la próxima vez</label>
-                </div>
-
-                <!-- Botón de Pago -->
-                <button type="submit">Realizar Pago</button>
-            </form>
+            <h2>Información del Cliente</h2>
+            <form id="customerInfoForm" action="procesar_cliente.php" method="post">
+            <!-- Campos de información del cliente -->
+        <div class="form-group">
+            <label>Nombre</label>
+            <input type="text" name="nombre" required>
         </div>
+            <div class="form-group">
+            <label>Apellidos</label>
+            <input type="text" name="apellidos" required>
+        </div>
+        <div class="form-group">
+            <label>Email</label>
+            <input type="email" name="email" required>
+        </div>
+        <div class="form-group">
+            <label>Teléfono</label>
+            <input type="text" name="telefono" required>
+        </div>
+        <div class="form-group">
+            <label>Dirección</label>
+            <input type="text" name="direccion" required>
+        </div>
+        <div class="form-group">
+            <label>Código Postal</label>
+            <input type="text" name="codigo_postal" required>
+        </div>
+        <div class="form-group">
+            <label>Ciudad</label>
+            <input type="text" name="ciudad" required>
+        </div>
+        <div class="form-group">
+            <label>Estado</label>
+            <select name="estado" required>
+                <option value="queretaro">Querétaro</option>
+                <!-- Otros estados -->
+            </select>
+        </div>
+        <button type="button" onclick="submitCustomerInfo()">Continuar</button>
+    </form>
+        </div>
+
+
+
 
         <!-- Columna Derecha (Resumen de Productos) -->
-        <div class="column">
-            <h2>Resumen de Productos</h2>
-            <div class="product-list" id="product-summary">
-                <!-- Aquí puedes cargar los productos del carrito usando PHP o JavaScript -->
-                <div class="product-item">
-                    <p>Producto 1 - $100.00</p>
-                </div>
-                <div class="product-item">
-                    <p>Producto 2 - $200.00</p>
-                </div>
-                <!-- Total -->
-                <p><strong>Total: $300.00</strong></p>
-            </div>
+        <div class="product-summary">
+        <h2>Resumen de Productos</h2>
+            <?php if (!empty($productosCarrito)): ?>
+                <?php foreach ($productosCarrito as $producto): ?>
+                    <div class="product-item">
+                        <img src="<?php echo htmlspecialchars('../' . $producto['imagen']); ?>" alt="Imagen de <?php echo htmlspecialchars($producto['nombre']); ?>" style="width: 50px; height: 50px; margin-right: 10px;">
+                        <div>
+                            <p><?php echo htmlspecialchars($producto['nombre']); ?></p>
+                            <p>Precio: $<?php echo number_format($producto['precio'], 2); ?></p>
+                            <p>Cantidad: <?php echo $producto['cantidad']; ?></p>
+                            <p>Costo de embalaje: $<?php echo number_format($producto['costo_embalaje'], 2); ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+                <p class="total">Total de productos: $<?php echo number_format($total, 2); ?></p>
+                <p class="total">Total Costo de Embalaje: $<?php echo number_format($total_embalaje, 2); ?></p>
+                <p class="total">Gran Total: $<?php echo number_format($total + $total_embalaje, 2); ?></p>
+            <?php else: ?>
+                <p>No hay productos en el carrito.</p>
+            <?php endif; ?>
         </div>
     </div>
+
+
+
+    <script>
+        function submitCustomerInfo() {
+            // Lógica para enviar el formulario del cliente usando AJAX
+            // Aquí puedes guardar la información en OpenPay y luego mostrar el formulario de tarjeta
+            document.getElementById("customerForm").style.display = "none";
+            document.getElementById("cardForm").style.display = "block";
+        }
+    </script>
+</div>
 </body>
+
 </html>

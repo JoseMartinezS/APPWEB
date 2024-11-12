@@ -33,12 +33,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 
     // Obtener el precio y peso del producto
-    $sql = "SELECT precio, peso FROM productos WHERE id_producto = ?";
+    $sql = "SELECT nombre, precio, peso FROM productos WHERE id_producto = ?";
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("i", $producto_id);
     $stmt->execute();
     $result = $stmt->get_result();
     $producto = $result->fetch_assoc();
+    $nombre_producto = $producto['nombre'];
     $precio_unitario = $producto['precio'];
     $peso_producto = $producto['peso'];
 
