@@ -50,6 +50,9 @@ while ($row = $result_carrito->fetch_assoc()) {
 <html>
 <head>
     <title>Formulario de Pago</title>
+    <script src="https://openpay.s3.amazonaws.com/openpay.v1.min.js"></script>
+    <script src="https://openpay.s3.amazonaws.com/openpay-data.v1.min.js"></script>
+
     <style>
         /* Estilos generales */
         body {
@@ -98,6 +101,50 @@ while ($row = $result_carrito->fetch_assoc()) {
             margin-top: 10px;
         }
 
+        /* Estilo para el contenedor de pasos */
+        .step-indicator {
+            display: flex;
+            margin-bottom: 20px;
+        }
+
+        .step {
+            flex: 1;
+            text-align: center;
+            font-weight: bold;
+            padding: 10px;
+            color: #fff;
+            border-radius: 5px;
+        }
+
+        .step-active {
+            background-color: #007bff;
+        }
+
+        .step-inactive {
+            background-color: #ccc;
+        }
+
+        /* Botón de pago */
+        button[type="button"],
+        button[type="submit"] {
+            background-color: #28a745;
+            color: white;
+            padding: 10px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        button[type="button"]:hover,
+        button[type="submit"]:hover {
+            background-color: #218838;
+        }
+
+        /* Ocultar el formulario de tarjeta al inicio */
+        #cardForm {
+            display: none;
+        }
+
         /* Estilo para el contenedor de productos */
         .product-list {
             border: 1px solid #ccc;
@@ -138,73 +185,89 @@ while ($row = $result_carrito->fetch_assoc()) {
             margin-top: 15px;
             text-align: right;
         }
-
-        /* Botón de pago */
-        button[type="submit"] {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button[type="submit"]:hover {
-            background-color: #218838;
-        }
     </style>
 </head>
 <body>
-    <div class="container" id="clienteForm">
-        <!-- Columna Izquierda (Formulario de Pago) -->
-        <div class="column">
+
+<div class="container">
+    <!-- Columna Izquierda (Formulario de Información del Cliente y Pago) -->
+    <div class="column">
+        <!-- Indicador de Pasos -->
+        <div class="step-indicator">
+            <div id="step1" class="step step-active">1. Información del Cliente</div>
+            <div id="step2" class="step step-inactive">2. Información de Pago</div>
+        </div>
+
+        <!-- Formulario de Información del Cliente -->
+        <div id="customerForm">
             <h2>Información del Cliente</h2>
             <form id="customerInfoForm" action="procesar_cliente.php" method="post">
-            <!-- Campos de información del cliente -->
-        <div class="form-group">
-            <label>Nombre</label>
-            <input type="text" name="nombre" required>
-        </div>
-            <div class="form-group">
-            <label>Apellidos</label>
-            <input type="text" name="apellidos" required>
-        </div>
-        <div class="form-group">
-            <label>Email</label>
-            <input type="email" name="email" required>
-        </div>
-        <div class="form-group">
-            <label>Teléfono</label>
-            <input type="text" name="telefono" required>
-        </div>
-        <div class="form-group">
-            <label>Dirección</label>
-            <input type="text" name="direccion" required>
-        </div>
-        <div class="form-group">
-            <label>Código Postal</label>
-            <input type="text" name="codigo_postal" required>
-        </div>
-        <div class="form-group">
-            <label>Ciudad</label>
-            <input type="text" name="ciudad" required>
-        </div>
-        <div class="form-group">
-            <label>Estado</label>
-            <select name="estado" required>
-                <option value="queretaro">Querétaro</option>
-                <!-- Otros estados -->
-            </select>
-        </div>
-        <button type="button" onclick="submitCustomerInfo()">Continuar</button>
-    </form>
+                <div class="form-group">
+                    <label>Nombre</label>
+                    <input type="text" name="nombre" required>
+                </div>
+                <div class="form-group">
+                    <label>Apellidos</label>
+                    <input type="text" name="apellidos" required>
+                </div>
+                <div class="form-group">
+                    <label>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label>Teléfono</label>
+                    <input type="text" name="telefono" required>
+                </div>
+                <div class="form-group">
+                    <label>Dirección</label>
+                    <input type="text" name="direccion" required>
+                </div>
+                <div class="form-group">
+                    <label>Código Postal</label>
+                    <input type="text" name="codigo_postal" required>
+                </div>
+                <div class="form-group">
+                    <label>Ciudad</label>
+                    <input type="text" name="ciudad" required>
+                </div>
+                <div class="form-group">
+                    <label>Estado</label>
+                    <select name="estado" required>
+                        <option value="queretaro">Querétaro</option>
+                        <!-- Otros estados -->
+                    </select>
+                </div>
+                <button type="button" onclick="showPaymentForm()">Continuar</button>
+            </form>
         </div>
 
+        <!-- Formulario de Pago -->
+        <div id="cardForm">
+            <h2>Información de Pago</h2>
+            <form action="procesar_pago.php" method="post">
+                <div class="form-group">
+                    <label>Número de Tarjeta</label>
+                    <input type="text" name="card_number" required>
+                </div>
+                <div class="form-group">
+                    <label>Nombre en la Tarjeta</label>
+                    <input type="text" name="card_name" required>
+                </div>
+                <div class="form-group">
+                    <label>Fecha de Expiración</label>
+                    <input type="text" name="expiry_date" placeholder="MM/AA" required>
+                </div>
+                <div class="form-group">
+                    <label>CVV</label>
+                    <input type="text" name="cvv" required>
+                </div>
+                <button type="submit">Pagar</button>
+            </form>
+        </div>
+    </div>
 
-
-
-        <!-- Columna Derecha (Resumen de Productos) -->
-        <div class="product-summary">
+    <!-- Columna Derecha (Resumen de Productos) -->
+    <div class="product-summary">
         <h2>Resumen de Productos</h2>
             <?php if (!empty($productosCarrito)): ?>
                 <?php foreach ($productosCarrito as $producto): ?>
@@ -225,19 +288,24 @@ while ($row = $result_carrito->fetch_assoc()) {
                 <p>No hay productos en el carrito.</p>
             <?php endif; ?>
         </div>
-    </div>
 
-
-
-    <script>
-        function submitCustomerInfo() {
-            // Lógica para enviar el formulario del cliente usando AJAX
-            // Aquí puedes guardar la información en OpenPay y luego mostrar el formulario de tarjeta
-            document.getElementById("customerForm").style.display = "none";
-            document.getElementById("cardForm").style.display = "block";
-        }
-    </script>
+    
 </div>
-</body>
 
+<script>
+    function showPaymentForm() {
+        // Ocultar el formulario de cliente y mostrar el de pago
+        document.getElementById("customerForm").style.display = "none";
+        document.getElementById("cardForm").style.display = "block";
+
+        // Cambiar el estado de los pasos
+        document.getElementById("step1").classList.remove("step-active");
+        document.getElementById("step1").classList.add("step-inactive");
+        document.getElementById("step2").classList.remove("step-inactive");
+        document.getElementById("step2").classList.add("step-active");
+    }
+</script>
+
+</body>
 </html>
+
