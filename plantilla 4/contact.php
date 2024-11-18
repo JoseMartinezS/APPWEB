@@ -1,8 +1,7 @@
 <?php
+require 'vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
-// Incluye la clase autoload generada por Composer
-require 'vendor/autoload.php';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $name = $_POST['Name'];
@@ -14,17 +13,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $verifyUrl = "https://www.google.com/recaptcha/api/siteverify";
 
     // Validación simple
-    if(empty($name) || empty($email) || empty($message)) {
-        echo 'Por favor, completa todos los campos obligatorios.';
+    if (empty($name) || empty($email) || empty($message)) {
+        header("Location: index.php?status=error");
         exit;
     }
 
     // Verificación de reCAPTCHA
-    $response = file_get_contents($verifyUrl . "?secret=" . $secretKey . "&response=" . $recaptchaResponse);
-    $responseKeys = json_decode($response, true);
+    $responseCaptcha = file_get_contents($verifyUrl . "?secret=" . $secretKey . "&response=" . $recaptchaResponse);
+    $responseKeys = json_decode($responseCaptcha, true);
 
     if (intval($responseKeys["success"]) !== 1) {
-        echo 'Por favor, completa el CAPTCHA correctamente.';
+        header("Location: index.php?status=error");
+        exit;
     } else {
         // CAPTCHA válido, procede con el envío del correo
         $mail = new PHPMailer(true);        
@@ -52,10 +52,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             // Enviar el correo
             $mail->send();
-            echo 'El mensaje ha sido enviado exitosamente.';
+            header("Location: index.php?status=success");
+            exit;
         } catch (Exception $e) {
-            echo "El mensaje no pudo ser enviado. Error: {$mail->ErrorInfo}";
+            header("Location: index.php?status=error");
+            exit;
         }
     }
 }
-?>

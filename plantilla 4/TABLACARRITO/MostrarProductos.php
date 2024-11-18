@@ -73,6 +73,7 @@ $total = 0;
       <!--[if lt IE 9]>
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
+      
     <style>
         body {
             background-color: #f4f4f4;
@@ -160,7 +161,7 @@ $total = 0;
                         <div class="full">
                             <div class="center-desk">
                                 <div class="logo">
-                                    <a href="index.html"><img src="../images/logo.png" alt="#" style="width: 150px; height: auto;" /></a>
+                                    <a href="index.html"><img src="../images/logo.png" alt="#" style="width: 300px; height: auto;" /></a>
                                 </div>
                             </div>
                         </div>

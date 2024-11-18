@@ -233,6 +233,7 @@ while ($row = $result_carrito->fetch_assoc()) {
                 <div class="form-group">
                     <label>Estado</label>
                     <select name="estado" required>
+                        <option value="coahuila">Coahuila</option>
                         <option value="queretaro">Querétaro</option>
                         <!-- Otros estados -->
                     </select>
@@ -244,25 +245,27 @@ while ($row = $result_carrito->fetch_assoc()) {
         <!-- Formulario de Pago -->
         <div id="cardForm">
             <h2>Información de Pago</h2>
-            <form action="procesar_pago.php" method="post">
-                <div class="form-group">
-                    <label>Número de Tarjeta</label>
-                    <input type="text" name="card_number" required>
-                </div>
-                <div class="form-group">
-                    <label>Nombre en la Tarjeta</label>
-                    <input type="text" name="card_name" required>
-                </div>
-                <div class="form-group">
-                    <label>Fecha de Expiración</label>
-                    <input type="text" name="expiry_date" placeholder="MM/AA" required>
-                </div>
-                <div class="form-group">
-                    <label>CVV</label>
-                    <input type="text" name="cvv" required>
-                </div>
-                <button type="submit">Pagar</button>
+            <form action="procesar_pago.php" method="post" id="paymentForm"> 
+                <div class="form-group"> 
+                    <label>Número de Tarjeta</label> 
+                    <input type="text" name="card_number" id="card_number" required> 
+                </div> 
+                <div class="form-group"> 
+                    <label>Nombre en la Tarjeta</label> 
+                    <input type="text" name="holder_name" id="holder_name" required> 
+                </div> <div class="form-group"> 
+                    <label>Fecha de Expiración</label> 
+                    <input type="text" name="expiry_month" id="expiry_month" placeholder="MM" required> 
+                    <input type="text" name="expiry_year" id="expiry_year" placeholder="AA" required> 
+                </div> 
+                <div class="form-group"> 
+                    <label>CVV</label> 
+                    <input type="text" name="cvv2" id="cvv2" required> 
+                </div> 
+                <input type="hidden" name="device_session_id" id="device_session_id"> 
+                <button type="submit">Pagar</button> 
             </form>
+
         </div>
     </div>
 
@@ -288,24 +291,67 @@ while ($row = $result_carrito->fetch_assoc()) {
                 <p>No hay productos en el carrito.</p>
             <?php endif; ?>
         </div>
-
-    
+ 
 </div>
 
 <script>
-    function showPaymentForm() {
-        // Ocultar el formulario de cliente y mostrar el de pago
-        document.getElementById("customerForm").style.display = "none";
-        document.getElementById("cardForm").style.display = "block";
 
-        // Cambiar el estado de los pasos
-        document.getElementById("step1").classList.remove("step-active");
-        document.getElementById("step1").classList.add("step-inactive");
-        document.getElementById("step2").classList.remove("step-inactive");
-        document.getElementById("step2").classList.add("step-active");
+// Configuración de OpenPay
+OpenPay.setId('mesi0huf4n1qrc3uvluo');
+OpenPay.setApiKey('pk_aa4a3ed461a24c7d8ea57b03505299e8'); // Asegúrate de usar la API key pública aquí
+OpenPay.setSandboxMode(true); // Cambia a false para producción
+
+// Genera device_session_id para antifraude
+OpenPay.deviceData.setup("paymentForm", "device_session_id");
+
+function showPaymentForm() {
+    // Ocultar el formulario de cliente y mostrar el de pago
+    document.getElementById("customerForm").style.display = "none";
+    document.getElementById("cardForm").style.display = "block";
+
+    // Cambiar el estado de los pasos
+    document.getElementById("step1").classList.remove("step-active");
+    document.getElementById("step1").classList.add("step-inactive");
+    document.getElementById("step2").classList.remove("step-inactive");
+    document.getElementById("step2").classList.add("step-active");
+}
+
+// Captura el evento de envío del formulario de pago
+document.getElementById("paymentForm").addEventListener("submit", function(event) {
+    event.preventDefault(); // Evita el envío automático del formulario
+
+    // Extrae los datos del formulario y crea el token
+    console.log("Datos del formulario antes de crear el token:");
+    var formData = new FormData(document.getElementById("paymentForm"));
+    for (var pair of formData.entries()) {
+        console.log(pair[0]+ ': ' + pair[1]);
     }
-</script>
 
+    OpenPay.token.extractFormAndCreate(document.getElementById("paymentForm"), successCallback, errorCallback);
+});
+
+function successCallback(response) {
+    const token_id = response.data.id;
+
+    // Crear un campo oculto para el token y añadirlo al formulario
+    let tokenInput = document.createElement("input");
+    tokenInput.setAttribute("type", "hidden");
+    tokenInput.setAttribute("name", "token_id");
+    tokenInput.setAttribute("value", token_id);
+    document.getElementById("paymentForm").appendChild(tokenInput);
+
+    // Enviar el formulario con el token añadido
+    console.log("Enviando formulario con token_id:", token_id);
+    document.getElementById("paymentForm").submit();
+}
+
+function errorCallback(response) {
+    console.log("Error al crear el token:", response); // Mostrar el contenido de response en la consola
+    alert("Error: " + (response.data ? response.data.description : "Error desconocido"));
+}
+
+
+</script>
 </body>
 </html>
 

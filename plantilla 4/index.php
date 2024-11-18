@@ -14,7 +14,7 @@ session_start();
       <meta name="viewport" content="width=device-width, initial-scale=1">
       <meta name="viewport" content="initial-scale=1, maximum-scale=1">
       <!-- site metas -->
-      <title>Rizomat</title>
+      <title>Rizomats</title>
       <meta name="keywords" content="">
       <meta name="description" content="">
       <meta name="author" content="">
@@ -35,6 +35,7 @@ session_start();
       <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
       <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script><![endif]-->
       <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+      
    </head>
    <!-- body -->
    <body class="main-layout">
@@ -57,7 +58,7 @@ session_start();
                         <div class="full">
                             <div class="center-desk">
                                 <div class="logo">
-                                    <a href="index.html"><img src="images/logo.png" alt="#" style="width: 150px; height: auto;" /></a>
+                                    <a href="index.html"><img src="images/logo.png" alt="#" style="width: 300px; height: auto;" /></a>
                                 </div>
                             </div>
                         </div>
@@ -207,7 +208,7 @@ session_start();
       <!-- end about -->
 
       <!-- Mision -->
-      <div id="Mision" class="mision">
+      <div id="Mision" class="about">
          <div class="container">
             <div class="row">
                <div class="col-md-5">
@@ -229,7 +230,7 @@ session_start();
 
       <!-- VISION -->
 
-      <div id="Mision" class="mision">
+      <div id="Mision" class="about">
          <div class="container">
             <div class="row">
                <div class="col-md-5">
@@ -554,38 +555,71 @@ session_start();
      
       <!-- Fin del diagrama -->
 
-      <!--  contact -->
-      <div id="contact" class="contact">
-         <div class="container">
-            <div class="row">
-               <div class="col-md-12">
-                  <div class="titlepage">
-                     <h2>Contactanos</h2>
-                  </div>
-               </div>
-            </div>
-            <div class="row">
-               <div class="col-md-6">
-               <form id="request" class="main_form" action="contact.php" method="post"> <div class="row"> <div class="col-md-12"> <input class="contactus" placeholder="Name" type="text" name="Name" required> </div> <div class="col-md-12"> <input class="contactus" placeholder="Email" type="email" name="Email" required> </div> <div class="col-md-12"> <input class="contactus" placeholder="PhoneNumber" type="text" name="PhoneNumber" required> </div> <div class="col-md-12"> <textarea class="textarea" placeholder="Message" name="Message" required></textarea> </div> <!-- Aquí se añade el widget de reCAPTCHA v2 --> <div class="g-recaptcha" data-sitekey="6LdKw24qAAAAABt4LYArbCF51JRqTiIMsCRBOLs0"></div> <div class="col-md-12"> <button type="submit" class="send_btn">Send</button> </div> </div> </form>
-               </div>
-               <div class="col-md-6">
-                  <div class="map_main">
-                      <div class="map-responsive">
-                          <iframe
-                          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.8576333274563!2d-101.40644448497866!3d26.944872824155234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868bcc4cd0bb8763%3A0xa202c7d8d49db8c2!2sTecNM%20-%20Campus%20Monclova!5e0!3m2!1ses!2smx!4v1631572294016!5m2!1ses!2smx"
-                          width="600"
-                          height="345"
-                          style="border:0; width: 100%;"
-                          allowfullscreen=""
-                          loading="lazy">
-                          </iframe>
-                      </div>
-                  </div>
-              </div>
+<!-- Contact Section -->
+<div id="contact" class="contact">
+   <div class="container">
+      <!-- Title -->
+      <div class="row">
+         <div class="col-md-12">
+            <div class="titlepage">
+               <h2>Contáctanos</h2>
             </div>
          </div>
       </div>
-      <!-- end contact -->
+      <!-- Contact Form and Map -->
+      <div class="row">
+         <!-- Contact Form -->
+         <div class="col-md-6">
+            <form id="request" class="main_form" action="contact.php" method="post">
+               <div class="row">
+                  <!-- Name Input -->
+                  <div class="col-md-12">
+                     <input class="contactus" placeholder="Nombre" type="text" name="Name" required>
+                  </div>
+                  <!-- Email Input -->
+                  <div class="col-md-12">
+                     <input class="contactus" placeholder="Correo" type="email" name="Email" required>
+                  </div>
+                  <!-- Phone Number Input -->
+                  <div class="col-md-12">
+                     <input class="contactus" placeholder="Número de Celular" type="text" name="PhoneNumber" required>
+                  </div>
+                  <!-- Message Textarea -->
+                  <div class="col-md-12">
+                     <textarea class="textarea" placeholder="Mensaje" name="Message" required></textarea>
+                  </div>
+                  <!-- reCAPTCHA -->
+                  <div class="col-md-12">
+                     <div class="g-recaptcha" data-sitekey="6LdKw24qAAAAABt4LYArbCF51JRqTiIMsCRBOLs0"></div>
+                  </div>
+                  <!-- Submit Button -->
+                  <div class="col-md-12">
+                     <button type="submit" class="send_btn">Enviar</button>
+                  </div>
+               </div>
+            </form>
+            
+         </div>
+         <!-- Google Map -->
+         <div class="col-md-6">
+            <div class="map_main">
+               <div class="map-responsive">
+                  <iframe
+                     src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3621.8576333274563!2d-101.40644448497866!3d26.944872824155234!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868bcc4cd0bb8763%3A0xa202c7d8d49db8c2!2sTecNM%20-%20Campus%20Monclova!5e0!3m2!1ses!2smx!4v1631572294016!5m2!1ses!2smx"
+                     width="600"
+                     height="345"
+                     style="border:0; width: 100%;"
+                     allowfullscreen=""
+                     loading="lazy">
+                  </iframe>
+               </div>
+            </div>
+         </div>
+      </div>
+   </div>
+</div>
+<!-- End Contact Section -->
+
 
       <!--  Fin de pagina -->
       <footer>

@@ -53,7 +53,7 @@ session_start();
                         <div class="full">
                             <div class="center-desk">
                                 <div class="logo">
-                                    <a href="index.html"><img src="../images/logo.png" alt="#" style="width: 150px; height: auto;" /></a>
+                                    <a href="index.html"><img src="../images/logo.png" alt="#" style="width: 300px; height: auto;" /></a>
                                 </div>
                             </div>
                         </div>
