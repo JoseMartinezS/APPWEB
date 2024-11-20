@@ -199,74 +199,129 @@ while ($row = $result_carrito->fetch_assoc()) {
         </div>
 
         <!-- Formulario de Información del Cliente -->
-        <div id="customerForm">
-            <h2>Información del Cliente</h2>
-            <form id="customerInfoForm" action="procesar_cliente.php" method="post">
-                <div class="form-group">
-                    <label>Nombre</label>
-                    <input type="text" name="nombre" required>
-                </div>
-                <div class="form-group">
-                    <label>Apellidos</label>
-                    <input type="text" name="apellidos" required>
-                </div>
-                <div class="form-group">
-                    <label>Email</label>
-                    <input type="email" name="email" required>
-                </div>
-                <div class="form-group">
-                    <label>Teléfono</label>
-                    <input type="text" name="telefono" required>
-                </div>
-                <div class="form-group">
-                    <label>Dirección</label>
-                    <input type="text" name="direccion" required>
-                </div>
-                <div class="form-group">
-                    <label>Código Postal</label>
-                    <input type="text" name="codigo_postal" required>
-                </div>
-                <div class="form-group">
-                    <label>Ciudad</label>
-                    <input type="text" name="ciudad" required>
-                </div>
-                <div class="form-group">
-                    <label>Estado</label>
-                    <select name="estado" required>
-                        <option value="coahuila">Coahuila</option>
-                        <option value="queretaro">Querétaro</option>
-                        <!-- Otros estados -->
-                    </select>
-                </div>
-                <button type="button" onclick="showPaymentForm()">Continuar</button>
-            </form>
-        </div>
+<div id="customerForm">
+<h2>Información del Cliente</h2>
+<form id="customerInfoForm" action="procesar_pago.php" method="post">
+<div class="form-group">
+<label>Nombre</label>
+<input type="text" name="nombre" id="nombre" required>
+</div>
+<div class="form-group">
+<label>Apellidos</label>
+<input type="text" name="apellidos" id="apellidos" required>
+</div>
+<div class="form-group">
+<label>Email</label>
+<input type="email" name="email" id="email" required>
+</div>
+<div class="form-group">
+<label>Teléfono</label>
+<input type="text" name="telefono" id="telefono" required>
+</div>
+<div class="form-group">
+<label>Dirección</label>
+<input type="text" name="direccion" id="direccion" required>
+</div>
+<div class="form-group">
+<label>Dirección Línea 2</label>
+<input type="text" name="direccion_linea2" id="direccion_linea2">
+</div>
+<div class="form-group">
+<label>Dirección Línea 3</label>
+<input type="text" name="direccion_linea3" id="direccion_linea3">
+</div>
+<div class="form-group">
+<label>Código Postal</label>
+<input type="text" name="codigo_postal" id="codigo_postal" required>
+</div>
+<div class="form-group">
+<label>Ciudad</label>
+<input type="text" name="ciudad" id="ciudad" required>
+</div>
+<div class="form-group">
+<label>Estado</label>
+<select name="estado" id="estado" required>
+<option value="coahuila">Coahuila</option>
+<option value="queretaro">Querétaro</option>
+<!-- Otros estados -->
+</select>
+</div>
+<button type="button" onclick="showPaymentForm()">Continuar</button>
+</form>
+</div>
+ 
+<!-- Formulario de Pago -->
+<div id="cardForm" style="display: none;">
+<h2>Información de Pago</h2>
+<form action="procesar_pago.php" method="post" id="paymentForm">
+<div class="form-group">
+<label>Número de Tarjeta</label>
+<input type="text" name="card_number" id="card_number" data-openpay-card="card_number" required>
+</div>
+<div class="form-group">
+<label>Nombre en la Tarjeta</label>
+<input type="text" name="holder_name" id="holder_name" data-openpay-card="holder_name" required>
+</div>
+<div class="form-group">
+<label>Fecha de Expiración</label>
+<input type="text" name="expiry_month" id="expiry_month" placeholder="MM" data-openpay-card="expiration_month" required>
+<input type="text" name="expiry_year" id="expiry_year" placeholder="AA" data-openpay-card="expiration_year" required>
+</div>
+<div class="form-group">
+<label>CVV</label>
+<input type="text" name="cvv2" id="cvv2" data-openpay-card="cvv2" required>
+</div>
+<div class="form-group">
+<label>Dirección de la Tarjeta</label>
+<input type="text" name="billing_address_line1" required>
+</div>
+<div class="form-group">
+<label>Dirección Línea 2</label>
+<input type="text" name="billing_address_line2">
+</div>
+<div class="form-group">
+<label>Dirección Línea 3</label>
+<input type="text" name="billing_address_line3">
+</div>
+<div class="form-group">
+<label>Código Postal</label>
+<input type="text" name="billing_postal_code" required>
+</div>
+<div class="form-group">
+<label>Ciudad</label>
+<input type="text" name="billing_city" required>
+</div>
+<div class="form-group">
+<label>Estado</label>
+<select name="billing_state" required>
+<option value="coahuila">Coahuila</option>
+<option value="queretaro">Querétaro</option>
+<!-- Otros estados -->
+</select>
+</div>
+<input type="hidden" name="billing_country_code" value="MX">
+<input type="hidden" name="device_session_id" id="device_session_id">
+<input type="hidden" name="token_id" id="token_id">
+<!-- Campos Ocultos para la Información del Cliente -->
+<input type="hidden" name="nombre" id="hidden_nombre">
+<input type="hidden" name="apellidos" id="hidden_apellidos">
+<input type="hidden" name="email" id="hidden_email">
+<input type="hidden" name="telefono" id="hidden_telefono">
+<input type="hidden" name="direccion" id="hidden_direccion">
+<input type="hidden" name="direccion_linea2" id="hidden_direccion_linea2">
+<input type="hidden" name="direccion_linea3" id="hidden_direccion_linea3">
+<input type="hidden" name="codigo_postal" id="hidden_codigo_postal">
+<input type="hidden" name="ciudad" id="hidden_ciudad">
+<input type="hidden" name="estado" id="hidden_estado">
 
-        <!-- Formulario de Pago -->
-        <div id="cardForm">
-            <h2>Información de Pago</h2>
-            <form action="procesar_pago.php" method="post" id="paymentForm"> 
-                <div class="form-group"> 
-                    <label>Número de Tarjeta</label> 
-                    <input type="text" name="card_number" id="card_number" required> 
-                </div> 
-                <div class="form-group"> 
-                    <label>Nombre en la Tarjeta</label> 
-                    <input type="text" name="holder_name" id="holder_name" required> 
-                </div> <div class="form-group"> 
-                    <label>Fecha de Expiración</label> 
-                    <input type="text" name="expiry_month" id="expiry_month" placeholder="MM" required> 
-                    <input type="text" name="expiry_year" id="expiry_year" placeholder="AA" required> 
-                </div> 
-                <div class="form-group"> 
-                    <label>CVV</label> 
-                    <input type="text" name="cvv2" id="cvv2" required> 
-                </div> 
-                <input type="hidden" name="device_session_id" id="device_session_id"> 
-                <button type="submit">Pagar</button> 
-            </form>
+<!-- Campos Ocultos para la Costo del Carrito -->
+<input type="hidden" name="total" id="total">
+<input type="hidden" name="total_embalaje" id="total_embalaje">
 
-        </div>
+<button type="submit">Pagar</button>
+</form>
+</div>
+
     </div>
 
     <!-- Columna Derecha (Resumen de Productos) -->
@@ -295,63 +350,77 @@ while ($row = $result_carrito->fetch_assoc()) {
 </div>
 
 <script>
-
 // Configuración de OpenPay
 OpenPay.setId('mesi0huf4n1qrc3uvluo');
 OpenPay.setApiKey('pk_aa4a3ed461a24c7d8ea57b03505299e8'); // Asegúrate de usar la API key pública aquí
 OpenPay.setSandboxMode(true); // Cambia a false para producción
-
+ 
 // Genera device_session_id para antifraude
 OpenPay.deviceData.setup("paymentForm", "device_session_id");
-
+ 
 function showPaymentForm() {
     // Ocultar el formulario de cliente y mostrar el de pago
     document.getElementById("customerForm").style.display = "none";
     document.getElementById("cardForm").style.display = "block";
+ 
+    // Transferir datos del formulario del cliente a campos ocultos del formulario de pago
+    document.getElementById("hidden_nombre").value = document.getElementById("nombre").value;
+    document.getElementById("hidden_apellidos").value = document.getElementById("apellidos").value;
+    document.getElementById("hidden_email").value = document.getElementById("email").value;
+    document.getElementById("hidden_telefono").value = document.getElementById("telefono").value;
+    document.getElementById("hidden_direccion").value = document.getElementById("direccion").value;
+    document.getElementById("hidden_direccion_linea2").value = document.getElementById("direccion_linea2").value;
+    document.getElementById("hidden_direccion_linea3").value = document.getElementById("direccion_linea3").value;
+    document.getElementById("hidden_codigo_postal").value = document.getElementById("codigo_postal").value;
+    document.getElementById("hidden_ciudad").value = document.getElementById("ciudad").value;
+    document.getElementById("hidden_estado").value = document.getElementById("estado").value;
 
+    // Transferir los valores de total y total de embalaje
+    document.getElementById("total").value = <?php echo json_encode($total); ?>;     
+    document.getElementById("total_embalaje").value = <?php echo json_encode($total_embalaje); ?>;
+ 
     // Cambiar el estado de los pasos
     document.getElementById("step1").classList.remove("step-active");
     document.getElementById("step1").classList.add("step-inactive");
     document.getElementById("step2").classList.remove("step-inactive");
     document.getElementById("step2").classList.add("step-active");
 }
-
+ 
 // Captura el evento de envío del formulario de pago
 document.getElementById("paymentForm").addEventListener("submit", function(event) {
     event.preventDefault(); // Evita el envío automático del formulario
-
+ 
     // Extrae los datos del formulario y crea el token
     console.log("Datos del formulario antes de crear el token:");
     var formData = new FormData(document.getElementById("paymentForm"));
     for (var pair of formData.entries()) {
         console.log(pair[0]+ ': ' + pair[1]);
     }
-
-    OpenPay.token.extractFormAndCreate(document.getElementById("paymentForm"), successCallback, errorCallback);
+ 
+    OpenPay.token.extractFormAndCreate('paymentForm', successCallback, errorCallback);
 });
-
+ 
 function successCallback(response) {
     const token_id = response.data.id;
-
+ 
     // Crear un campo oculto para el token y añadirlo al formulario
     let tokenInput = document.createElement("input");
     tokenInput.setAttribute("type", "hidden");
     tokenInput.setAttribute("name", "token_id");
     tokenInput.setAttribute("value", token_id);
     document.getElementById("paymentForm").appendChild(tokenInput);
-
+ 
     // Enviar el formulario con el token añadido
     console.log("Enviando formulario con token_id:", token_id);
     document.getElementById("paymentForm").submit();
 }
-
+ 
 function errorCallback(response) {
     console.log("Error al crear el token:", response); // Mostrar el contenido de response en la consola
     alert("Error: " + (response.data ? response.data.description : "Error desconocido"));
 }
-
-
 </script>
+
 </body>
 </html>
 
