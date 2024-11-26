@@ -27,7 +27,7 @@ $sql_carrito = "SELECT p.nombre, p.precio, dc.cantidad, p.imagen, dc.costo_embal
                 FROM detalle_carrito dc 
                 JOIN productos p ON dc.id_producto = p.id_producto 
                 JOIN carrito c ON dc.id_carrito = c.id_carrito 
-                WHERE c.id_usuario = ?";
+                WHERE c.id_usuario = ? AND p.status = 1";
 $stmt_carrito = $conn->prepare($sql_carrito);
 $stmt_carrito->bind_param("i", $usuario_id);
 $stmt_carrito->execute();
@@ -52,140 +52,8 @@ while ($row = $result_carrito->fetch_assoc()) {
     <title>Formulario de Pago</title>
     <script src="https://openpay.s3.amazonaws.com/openpay.v1.min.js"></script>
     <script src="https://openpay.s3.amazonaws.com/openpay-data.v1.min.js"></script>
+    <link rel="stylesheet" href="stylePago.css">
 
-    <style>
-        /* Estilos generales */
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            margin: 20px;
-        }
-
-        .container {
-            display: flex;
-            width: 100%;
-            max-width: 1000px;
-        }
-
-        /* Contenedores de columnas */
-        .column {
-            width: 50%;
-            padding: 20px;
-        }
-
-        /* Estilo del formulario */
-        .form-group {
-            margin-bottom: 15px;
-        }
-
-        label {
-            display: block;
-            font-weight: bold;
-            margin-bottom: 5px;
-        }
-
-        input[type="text"],
-        input[type="email"],
-        input[type="number"],
-        select {
-            width: 100%;
-            padding: 8px;
-            margin-bottom: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-        }
-
-        /* Checkbox */
-        .save-info {
-            margin-top: 10px;
-        }
-
-        /* Estilo para el contenedor de pasos */
-        .step-indicator {
-            display: flex;
-            margin-bottom: 20px;
-        }
-
-        .step {
-            flex: 1;
-            text-align: center;
-            font-weight: bold;
-            padding: 10px;
-            color: #fff;
-            border-radius: 5px;
-        }
-
-        .step-active {
-            background-color: #007bff;
-        }
-
-        .step-inactive {
-            background-color: #ccc;
-        }
-
-        /* Botón de pago */
-        button[type="button"],
-        button[type="submit"] {
-            background-color: #28a745;
-            color: white;
-            padding: 10px 15px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
-
-        button[type="button"]:hover,
-        button[type="submit"]:hover {
-            background-color: #218838;
-        }
-
-        /* Ocultar el formulario de tarjeta al inicio */
-        #cardForm {
-            display: none;
-        }
-
-        /* Estilo para el contenedor de productos */
-        .product-list {
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            padding: 20px;
-            background-color: #f9f9f9;
-        }
-
-        .product-item {
-            display: flex;
-            align-items: center;
-            margin-bottom: 10px;
-        }
-
-        .product-item img {
-            border-radius: 5px;
-            width: 50px;
-            height: 50px;
-            margin-right: 10px;
-        }
-
-        .product-item p {
-            margin: 0;
-        }
-
-        .product-summary {
-            max-width: 400px;
-            margin: 20px auto;
-            padding: 20px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-        }
-        .product-summary h2 {
-            text-align: center;
-        }
-        .product-summary p.total {
-            font-weight: bold;
-            margin-top: 15px;
-            text-align: right;
-        }
-    </style>
 </head>
 <body>
 

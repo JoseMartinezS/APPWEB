@@ -34,7 +34,7 @@ if ($conn->query($sql) === TRUE) {
     // Cerrar conexión
     $conn->close();
     // Redirigir a index.html
-    header("Location: ../index.html");
+    header("Location: ../index.php");
     exit;
 } else {
     echo "Error: " . $sql . "<br>" . $conn->error;

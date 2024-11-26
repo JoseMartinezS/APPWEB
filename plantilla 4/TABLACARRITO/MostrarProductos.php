@@ -234,7 +234,7 @@ $total = 0;
                             FROM detalle_carrito dc 
                             JOIN productos p ON dc.id_producto = p.id_producto 
                             JOIN carrito c ON dc.id_carrito = c.id_carrito 
-                            WHERE c.id_usuario = ?";
+                            WHERE c.id_usuario = ? AND p.status = 1";
             $stmt_carrito = $conn->prepare($sql_carrito);
             $stmt_carrito->bind_param("i", $usuario_id);
             $stmt_carrito->execute();

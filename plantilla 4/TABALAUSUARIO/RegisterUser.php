@@ -57,63 +57,8 @@
     </style>
 </head>
 <body>
-<header>
-    <div class="header">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 col-sm-3 col logo_section">
-                    <div class="full">
-                        <div class="center-desk">
-                            <div class="logo">
-                                <a href="index.html"><img src="../images/logo.png" alt="#" style="width: 300px; height: auto;" /></a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-10 offset-md-1">
-                    <nav class="navigation navbar navbar-expand-md navbar-dark">
-                        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
-                            <span class="navbar-toggler-icon"></span>
-                        </button>
-                        <div class="collapse navbar-collapse" id="navbarsExample04">
-                            <ul class="navbar-nav mr-auto">
-                                <li class="nav-item active">
-                                    <a class="nav-link" href="../index.html">Home</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#about">About</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="service.html">Services</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="gallery.html">Gallery</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link" href="#testimonial">Testimonial</a>
-                                </li>
-                                <li class="nav-item">
-                                    <a class="nav-link btn btn-primary" href="test.php">Contact Us</a>
-                                </li>
-                            </ul>
-                            <div class="navbar-icons">
-                                <a class="nav-link" href="../Iniciosesion.php" style="color: rgb(10, 10, 10);" title="Login">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                </a>
-                                <a class="nav-link" href="../TABLAPRODUCTOS/RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </a>
-                                <a class="nav-link" href="../TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
-                                    <i class="fa fa-shopping-cart" aria-hidden="true"></i>
-                                </a>
-                            </div>
-                        </div>
-                    </nav>
-                </div>
-            </div>
-        </div>
-    </div>
-</header>
+<?php include 'header.php'; ?>
+
 
 <section class="h-100 h-custom">
     <div class="container py-5 h-100">

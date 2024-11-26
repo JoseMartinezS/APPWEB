@@ -598,7 +598,6 @@ session_start();
                   </div>
                </div>
             </form>
-            
          </div>
          <!-- Google Map -->
          <div class="col-md-6">
