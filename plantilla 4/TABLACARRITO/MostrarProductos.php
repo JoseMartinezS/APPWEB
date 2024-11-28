@@ -80,72 +80,72 @@ $total = 0;
             font-family: 'Arial', sans-serif;
         }
 
-    .card {
-        width: 15rem;
-        margin: 1rem;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-
-    .card-img-top {
-        width: 100%;
-        height: 180px;
-        object-fit: cover;
-    }
-
-    .card-body {
-        display: flex;
-        flex-direction: column;
-        flex-grow: 1;
-        justify-content: space-between;
-    }
-
-    .btn {
-        margin-top: auto;
-    }
-
-    .row {
-        margin-left: -1rem;
-        margin-right: -1rem;
-    }
-
-    /* Estilos para el carrito */
-    #cart {
-        border: 1px solid #ddd;
-        padding: 15px;
-        margin-bottom: 20px;
-        background-color: #f9f9f9;
-    }
-
-    #cart h5 {
-        margin-bottom: 15px;
-    }
-
-    /* FIN para el carrito */
-
-    /* Estilos para el detalle carrito */
-    .cart-item {
+        .card {
+            width: 15rem;
+            margin: 1rem;
             display: flex;
-            align-items: center;
-            padding: 10px;
-            border-bottom: 1px solid #ddd;
+            flex-direction: column;
+            justify-content: space-between;
         }
 
-        .cart-item img {
-            width: 50px;
-            height: 50px;
+        .card-img-top {
+            width: 100%;
+            height: 180px;
             object-fit: cover;
-            margin-right: 15px;
         }
 
-        .cart-item .cart-details {
+        .card-body {
+            display: flex;
+            flex-direction: column;
             flex-grow: 1;
+            justify-content: space-between;
         }
 
-        .cart-item .cart-price {
-            font-weight: bold;
+        .btn {
+            margin-top: auto;
         }
+
+        .row {
+            margin-left: -1rem;
+            margin-right: -1rem;
+        }
+
+        /* Estilos para el carrito */
+        #cart {
+            border: 1px solid #ddd;
+            padding: 15px;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+
+        #cart h5 {
+            margin-bottom: 15px;
+        }
+
+        /* FIN para el carrito */
+
+        /* Estilos para el detalle carrito */
+        .cart-item {
+                display: flex;
+                align-items: center;
+                padding: 10px;
+                border-bottom: 1px solid #ddd;
+            }
+
+            .cart-item img {
+                width: 50px;
+                height: 50px;
+                object-fit: cover;
+                margin-right: 15px;
+            }
+
+            .cart-item .cart-details {
+                flex-grow: 1;
+            }
+
+            .cart-item .cart-price {
+                font-weight: bold;
+            }
 
 
 

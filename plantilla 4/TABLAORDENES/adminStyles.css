@@ -1,0 +1,156 @@
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    margin: 0;
+    padding: 20px;
+}
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.admin-filters { 
+    display: flex; 
+    justify-content: center; 
+    margin-bottom: 20px; 
+    padding: 20px; 
+    background-color: #fff; 
+    border-radius: 10px; 
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+} 
+
+.admin-filters label 
+{ margin-right: 10px; 
+    font-weight: bold; 
+} 
+
+.admin-filters input[type="date"],
+.admin-filters select { 
+    margin-right: 10px; 
+    padding: 5px; 
+    border-radius: 5px; 
+    border: 1px solid #ccc; 
+} 
+
+.admin-filter-button { 
+    background-color: #4caf50; 
+    color: white; 
+    padding: 5px 10px; 
+    border: none; 
+    border-radius: 5px; 
+    cursor: pointer; 
+    transition: background-color 0.3s; 
+} 
+
+.admin-filter-button:hover { 
+    background-color: #45a049; 
+}
+
+.admin-orders-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.admin-order-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-order-details {
+    text-align: left;
+    width: 100%;
+}
+
+.admin-update-form {
+    display: flex;
+    align-items: center;
+    margin-top: 10px;
+}
+
+.admin-update-form select {
+    margin-right: 10px;
+    padding: 5px;
+    border-radius: 5px;
+    border: 1px solid #ccc;
+}
+
+.admin-update-form button {
+    background-color: #4caf50;
+    color: white;
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.admin-update-form button:hover {
+    background-color: #45a049;
+}
+
+.admin-view-details-button {
+    display: inline-block;
+    margin-top: 10px;
+    background-color: #2196f3;
+    color: white;
+    padding: 5px 10px;
+    border-radius: 5px;
+    text-decoration: none;
+    transition: background-color 0.3s;
+}
+
+.admin-view-details-button:hover {
+    background-color: #1e7bbf;
+}
+
+/* Estilos específicos para el modal */
+.admin-details-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.admin-details-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px;
+    padding: 20px;
+    width: 90%; /* Ajustar el ancho al 90% del modal */
+    display: flex;
+    flex-direction: row; /* Disposición en fila */
+    align-items: center;
+}
+
+.admin-product-image {
+    width: 80px;
+    height: 80px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px;
+}
+
+.admin-product-details {
+    text-align: left;
+    flex: 1;
+}
+
+/* Especificar estilos para los encabezados y párrafos en los detalles */
+.admin-product-details h2 {
+    margin: 0;
+    font-size: 18px;
+}
+
+.admin-product-details p {
+    margin: 5px 0;
+    font-size: 16px;
+}

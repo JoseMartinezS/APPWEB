@@ -1,0 +1,87 @@
+
+
+h1 {
+    text-align: center;
+    color: #333;
+}
+
+.compras-orders-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.compras-order-card {
+    background-color: #fff;
+    border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin: 10px 0;
+    padding: 20px;
+    width: 85%; /* Ajustar al 85% del ancho de la pantalla */
+    display: flex;
+    flex-direction: row; /* Cambiado a fila */
+    align-items: center;
+    position: relative;
+}
+
+.compras-product-image {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    border-radius: 5px;
+    margin-right: 20px; /* Espacio entre la imagen y los detalles */
+}
+
+.compras-order-details {
+    flex: 1; /* Permite que los detalles ocupen el espacio restante */
+    text-align: left; /* Alinear texto a la izquierda */
+    margin-right: 20px; /* Añadir margen derecho para separar del estado */
+}
+
+.compras-order-status {
+    position: relative;
+    top: 0;
+    background-color: #ffd700;
+    padding: 5px 10px;
+    border-radius: 5px;
+    color: #fff;
+    font-weight: bold;
+    margin-bottom: 10px; /* Espacio entre el estado y el nombre del producto */
+}
+
+.compras-order-status.pendiente {
+    background-color: #ff6347;
+}
+
+.compras-order-status.en-proceso {
+    background-color: #ffa500;
+}
+
+.compras-order-status.completada {
+    background-color: #4caf50;
+}
+
+/* Añadir regla específica para h2 dentro de compras-order-details */
+.compras-order-details h2 {
+    margin: 0; /* Eliminar margen por defecto */
+    text-align: left; /* Asegura que el texto se alinea a la izquierda */
+}
+
+.compras-order-actions {
+    margin-left: 20px; /* Espacio entre los detalles y el botón */
+}
+
+.compras-buy-again-button {
+    background-color: #4caf50;
+    color: #fff;
+    padding: 10px 20px;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: background-color 0.3s ease;
+}
+
+.compras-buy-again-button:hover {
+    background-color: #45a049;
+}
+
+

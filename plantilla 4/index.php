@@ -83,10 +83,10 @@ session_start();
                                         <a class="nav-link" href="productos.php">Productos</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="proceso.php">Proceso</a>
+                                        <a class="nav-link" href="TABLAORDENES/UsuarioOrdenes.php">Proceso</a>
                                     </li>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="contactanos.php">Contactanos</a>
+                                        <a class="nav-link" href="TABLAORDENES/adminOrdenes.php">Contactanos</a>
                                     </li>
                                 </ul>
                                 <div class="navbar-icons">
