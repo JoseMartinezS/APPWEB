@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -20,6 +23,7 @@
 </head>
 <body>
 <header>
+    <!-- header inner -->
     <div class="header">
         <div class="container">
             <div class="row">
@@ -40,31 +44,53 @@
                         <div class="collapse navbar-collapse" id="navbarsExample04">
                             <ul class="navbar-nav mr-auto">
                                 <li class="nav-item active">
-                                    <a class="nav-link" href="../index.html">Home</a>
+                                    <a class="nav-link" href="../index.php">Inicio</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#about">About</a>
+                                    <a class="nav-link" href="../about.php">Acerca</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="service.html">Services</a>
+                                    <a class="nav-link" href="../valores.php">Valores</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="gallery.html">Gallery</a>
+                                    <a class="nav-link" href="../productos.php">Productos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="#testimonial">Testimonial</a>
+                                    <a class="nav-link" href="../proceso.php">Proceso</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link btn btn-primary" href="test.php">Contact Us</a>
+                                    <a class="nav-link" href="../contactanos.php">Contactanos</a>
                                 </li>
+                                <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === 1): ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="../TABLAORDENES/adminOrdenes.php">Órdenes</a>
+                                    </li>
+                                <?php endif; ?>
+                                <?php if (isset($_SESSION['usuario'])): ?>
+                                    <li class="nav-item">
+                                        <a class="nav-link" href="../TABLAORDENES/UsuarioOrdenes.php">Compras</a>
+                                    </li>
+                                <?php endif; ?>
                             </ul>
                             <div class="navbar-icons">
-                                <a class="nav-link" href="../Iniciosesion.php" style="color: rgb(10, 10, 10);" title="Login">
-                                    <i class="fa fa-user" aria-hidden="true"></i>
-                                </a>
-                                <a class="nav-link" href="RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
-                                    <i class="fa fa-plus" aria-hidden="true"></i>
-                                </a>
+                                <?php if (isset($_SESSION['usuario'])): ?>
+                                    <span class="nav-link" style="color: rgb(10, 10, 10);" title="Usuario"><?php echo $_SESSION['usuario']; ?></span>
+                                    <a class="nav-link" href="../logout.php" style="color: rgb(10, 10, 10);" title="Cerrar Sesión">
+                                        <i class="fa fa-sign-out" aria-hidden="true"></i>
+                                    </a>
+                                    <?php if ($_SESSION['is_admin']): ?>
+                                        <a class="nav-link" href="../TABLAPRODUCTOS/RegisterProducto.php" style="color: rgb(12, 12, 12);" title="Registrar Producto">
+                                            <i class="fa fa-plus" aria-hidden="true"></i>
+                                        </a>
+                                        <a class="nav-link" href="../TABLAPRODUCTOS/MostrarProductosEliminar.php" style="color: rgb(8, 8, 8);" title="Eliminar Producto">
+                                            <i class="fa fa-pencil" aria-hidden="true"></i>
+                                        </a>
+                                    <?php endif; ?>
+                                <?php else: ?>
+                                    <a class="nav-link" href="../Iniciosesion.php" style="color: rgb(10, 10, 10);" title="Login">
+                                        <i class="fa fa-user" aria-hidden="true"></i>
+                                    </a>
+                                <?php endif; ?>
                                 <a class="nav-link" href="../TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>

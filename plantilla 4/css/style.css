@@ -250,15 +250,13 @@ button {
 
 /*-- header area --*/
 
-
 /*--------------------------------------------------------------------- top banner area ---------------------------------------------------------------------*/
-
 
 /*-- navigation--*/
 
 .navigation.navbar {
      display: flex; /* Usar flexbox */
-     justify-content: space-between; /* Separar elementos a los extremos */
+     justify-content: center; /* Centrar los elementos */
      align-items: center; /* Centrar verticalmente */
      padding-top: 35px !important;
      padding: 0;
@@ -267,11 +265,11 @@ button {
  .navigation.navbar-dark .navbar-nav {
      display: flex; /* Usar flexbox para los elementos del menú */
      flex-grow: 1; /* Hacer que ocupe todo el espacio disponible */
-     justify-content: flex-start; /* Alinear a la izquierda */
+     justify-content: center; /* Alinear al centro */
  }
  
  .navigation.navbar-dark .navbar-nav .nav-item {
-     margin: 0 20px; /* Espaciado entre enlaces */
+     margin: 0 15px; /* Espaciado entre enlaces */
  }
  
  .navigation.navbar-dark .navbar-nav .nav-link {
@@ -302,10 +300,11 @@ button {
  .navbar-icons {
      display: flex; /* Usar flexbox para los íconos */
      align-items: center; /* Centrar verticalmente */
+     justify-content: flex-end; /* Mover los íconos hacia la derecha */
  }
  
  .navbar-icons .nav-link {
-     margin-left: 20px; /* Espaciado entre íconos */
+     margin-left: 15px; /* Espaciado entre íconos */
  }
  
  .header {
@@ -317,7 +316,7 @@ button {
  .logo {
      text-align: center;
  }
-
+ 
 
 /** banner section **/
 
