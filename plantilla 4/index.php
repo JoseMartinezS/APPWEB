@@ -83,10 +83,10 @@ session_start();
                                     <a class="nav-link" href="productos.php">Productos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="proceso.php">Proceso</a>
+                                    <a class="nav-link" href="testCreacionTimbre.php">Proceso</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="contactanos.php">Contactanos</a>
+                                    <a class="nav-link" href="testFacturama.php">Contactanos</a>
                                 </li>
                                 <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === 1): ?>
                                     <li class="nav-item">

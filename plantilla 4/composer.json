@@ -1,6 +1,7 @@
 {
     "require": {
         "phpmailer/phpmailer": "^6.9",
-        "openpay/sdk": "^3.1"
+        "openpay/sdk": "^3.1",
+        "facturama/facturama-php-sdk": "^2.0"
     }
 }
