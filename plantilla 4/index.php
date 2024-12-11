@@ -83,10 +83,10 @@ session_start();
                                     <a class="nav-link" href="productos.php">Productos</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="testCreacionTimbre.php">Proceso</a>
+                                    <a class="nav-link" href="proceso.php">Proceso</a>
                                 </li>
                                 <li class="nav-item">
-                                    <a class="nav-link" href="testFacturama.php">Contactanos</a>
+                                    <a class="nav-link" href="contactanos.php">Contactanos</a>
                                 </li>
                                 <?php if (isset($_SESSION['is_admin']) && $_SESSION['is_admin'] === 1): ?>
                                     <li class="nav-item">
@@ -631,53 +631,53 @@ session_start();
 
 
       <!--  Fin de pagina -->
-      <footer>
-         <div class="footer">
-            <div class="container">
-               <div class="row">
-                  <div class="col-md-3 col-sm-6">
-                     <ul class="social_icon">
-                        <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
-                        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
-                        <li><a href="https://www.instagram.com/rizomatss?igsh=MThtdG54ZWNwdXBpMg==" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+<footer>
+   <div class="footer">
+      <div class="container">
+         <div class="row">
+            <div class="col-md-3 col-sm-6">
+               <ul class="social_icon">
+                  <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                  <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                  <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                  <li><a href="https://www.instagram.com/rizomatss?igsh=MThtdG54ZWNwdXBpMg==" target="_blank"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
 
-                     </ul>
-                     <p class="variat pad_roght2">Nuestros chetos de embalaje son una solución ecológica, ideales para proteger tus productos durante el envío.</p>
-                  </div>
-                  <div class="col-md-3 col-sm-6">
-                     <h3>TE AYUDAMOS?</h3>
-                     <p class="variat pad_roght2">Ofrecemos soluciones de embalaje que cuidan el medio ambiente y aseguran la integridad de tus envíos.</p>
-                  </div>
-                  <div class="col-md-3 col-sm-6">
-                     <h3>INFORMACIÓN</h3>
-                     <ul class="link_menu">
-                        <li><a href="index.html">Inicio</a></li>
-                        <li><a href="about.html">Acerca de</a></li>
-                        <li><a href="service.html">Servicios</a></li>
-                        <li><a href="gallery.html">Galería</a></li>
-                        <li><a href="testimonial.html">Testimonios</a></li>
-                        <li><a href="contact.html">Contáctanos</a></li>
-                     </ul>
-                  </div>
-                  <div class="col-md-3 col-sm-6">
-                     <h3>NUESTRO Diseño</h3>
-                     <p class="variat">Cuidamos del planeta con productos de embalaje sostenibles y eficaces.</p>
-                  </div>
-                  
-               </div>
+               </ul>
+               <p class="variat pad_roght2">Nuestros chetos de embalaje son una solución ecológica, ideales para proteger tus productos durante el envío.</p>
             </div>
-            <div class="copyright">
-               <div class="container">
-                  <div class="row">
-                     <div class="col-md-10 offset-md-1">
-                        <p>© 2024 Todos los derechos reservados. Rizomat
-                     </div>
-                  </div>
+            <div class="col-md-3 col-sm-6">
+               <h3>TE AYUDAMOS?</h3>
+               <p class="variat pad_roght2">Ofrecemos soluciones de embalaje que cuidan el medio ambiente y aseguran la integridad de tus envíos.</p>
+            </div>
+            <div class="col-md-3 col-sm-6">
+               <h3>INFORMACIÓN</h3>
+               <ul class="link_menu">
+                  <li><a href="index.html">Inicio</a></li>
+                  <li><a href="about.html">Acerca de</a></li>
+                  <li><a href="service.html">Servicios</a></li>
+                  <li><a href="gallery.html">Galería</a></li>
+                  <li><a href="testimonial.html">Testimonios</a></li>
+                  <li><a href="contact.html">Contáctanos</a></li>
+               </ul>
+            </div>
+            <div class="col-md-3 col-sm-6">
+               <h3>NUESTRO Diseño</h3>
+               <p class="variat">Cuidamos del planeta con productos de embalaje sostenibles y eficaces.</p>
+            </div>
+            
+         </div>
+      </div>
+      <div class="copyright">
+         <div class="container">
+            <div class="row">
+               <div class="col-md-10 offset-md-1">
+                  <p>© 2024 Todos los derechos reservados. Rizomat
                </div>
             </div>
          </div>
-      </footer>
+      </div>
+   </div>
+</footer>
       <!-- end footer -->
 
       <!-- Javascript files-->

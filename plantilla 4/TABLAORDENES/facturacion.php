@@ -1,78 +1,56 @@
+
 <?php
 session_start();
 require '../config.inc.php';
 
-// Verificar si el usuario está autenticado
-if (!isset($_SESSION['usuario_id'])) {
-    die('Usuario no autenticado.');
+// Verificar si el usuario es un administrador
+if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== 1) {
+    die('Acceso denegado.');
 }
-
-$usuario_id = $_SESSION['usuario_id'];
-
-// Crear conexión
-$conn = new mysqli($servername, $username, $password, $dbname);
-
-// Comprobar la conexión
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-}
-
-// Obtener todas las órdenes del usuario
-$sql_ordenes_usuario = "SELECT o.id_orden, o.total, o.fecha_orden, o.estado, p.nombre, p.imagen, do.cantidad
-                        FROM ordenes o
-                        JOIN detalle_orden do ON o.id_orden = do.id_orden
-                        JOIN productos p ON do.id_producto = p.id_producto
-                        WHERE o.id_usuario = ?";
-$stmt_ordenes_usuario = $conn->prepare($sql_ordenes_usuario);
-$stmt_ordenes_usuario->bind_param("i", $usuario_id);
-$stmt_ordenes_usuario->execute();
-$result_ordenes_usuario = $stmt_ordenes_usuario->get_result();
 ?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="styleFacturacion.css">
+    <meta charset="UTF-8">
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <!-- Asegúrate de incluir el enlace a Font Awesome en tu archivo HTML -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <link rel="stylesheet" href="styleOrdenesUsuario.css">
 
-      <!-- basic -->
-      <meta charset="utf-8">
-      <meta http-equiv="X-UA-Compatible" content="IE=edge">
-      <!-- mobile metas -->
-      <meta name="viewport" content="width=device-width, initial-scale=1">
-      <meta name="viewport" content="initial-scale=1, maximum-scale=1">
-      <!-- site metas -->
-      <title>Rizomat</title>
-      <meta name="keywords" content="">
-      <meta name="description" content="">
-      <meta name="author" content="">
-      <!-- bootstrap css -->
-      <link rel="stylesheet" href="../css/bootstrap.min.css">
-      <!-- style css -->
-      <link rel="stylesheet" href="../css/style.css">
-      <!-- Responsive-->
-      <link rel="stylesheet" href="../css/responsive.css">
-      <!-- fevicon -->
-      <link rel="icon" href="../images/fevicon.png" type="image/gif" />
-      <!-- Scrollbar Custom CSS -->
-      <link rel="stylesheet" href="../css/jquery.mCustomScrollbar.min.css">
-      <!-- Tweaks for older IEs-->
-      <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-      <!--[if lt IE 9]>]-->
-</head>
+    <!-- basic -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <!-- mobile metas -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="viewport" content="initial-scale=1, maximum-scale=1">
+    <!-- site metas -->
+    <title>Rizomat</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- bootstrap css -->
+    <link rel="stylesheet" href="../css/bootstrap.min.css">
+    <!-- style css -->
+    <link rel="stylesheet" href="../css/style.css">
+    <!-- Responsive-->
+    <link rel="stylesheet" href="../css/responsive.css">
+    <!-- fevicon -->
+    <link rel="icon" href="../images/fevicon.png" type="image/gif" />
+    <!-- Scrollbar Custom CSS -->
+    <link rel="stylesheet" href="../css/jquery.mCustomScrollbar.min.css">
+    <!-- Tweaks for older IEs-->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <!--[if lt IE 9]>]-->
+    <title>Facturación</title> 
+</head> 
 
-<style>
-    body {
-    font-family: Arial, sans-serif;
-    background-color: #f5f5f5;
-    margin: 0;
-    padding: 20px;
-        }
-</style>
-
-<body>
 <header>
     <!-- header inner -->
     <div class="header">
@@ -119,7 +97,7 @@ $result_ordenes_usuario = $stmt_ordenes_usuario->get_result();
                                 <?php endif; ?>
                                 <?php if (isset($_SESSION['usuario'])): ?>
                                     <li class="nav-item">
-                                        <a class="nav-link" href="../TABLAORDENES/misCompras.php">Compras</a>
+                                        <a class="nav-link" href="../TABLAORDENES/UsuarioOrdenes.php">Compras</a>
                                     </li>
                                 <?php endif; ?>
                             </ul>
@@ -142,7 +120,7 @@ $result_ordenes_usuario = $stmt_ordenes_usuario->get_result();
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </a>
                                 <?php endif; ?>
-                                <a class="nav-link" href="../TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
+                                <a class="nav-link" href="TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>
                             </div>
@@ -153,29 +131,22 @@ $result_ordenes_usuario = $stmt_ordenes_usuario->get_result();
         </div>
     </div>
 </header>
-
-    <br>
-    
-    <h1>Compras</h1>
-    <div class="compras-orders-container">
-        <?php while ($row = $result_ordenes_usuario->fetch_assoc()): ?>
-        <div class="compras-order-card">
-            <img src="<?php echo htmlspecialchars('../' . $row['imagen']); ?>" alt="<?php echo htmlspecialchars($row['nombre']); ?>" class="compras-product-image">
-            <div class="compras-order-details">
-                <span class="compras-order-status <?php echo strtolower(str_replace(' ', '-', $row['estado'])); ?>"><?php echo htmlspecialchars($row['estado']); ?></span>
-                <h2><?php echo htmlspecialchars($row['nombre']); ?></h2>
-                <p>Cantidad: <?php echo htmlspecialchars($row['cantidad']); ?></p>
-                <p>Fecha: <?php echo htmlspecialchars($row['fecha_orden']); ?></p>
-            </div>
-            <div class="compras-order-actions">
-                <a href="facturacion.php?id_orden=<?php echo $row['id_orden']; ?>" class="compras-facturar-button">Generar Factura</a>
-                <a href="cart.php" class="compras-buy-again-button">Volver a comprar</a>
-            </div>
-        </div>
-        <?php endwhile; ?>
+<body class="facturacion-body"> 
+    <div class="facturacion-container">
+         <h1>Datos de Facturación</h1> 
+         <form action="procesar_facturacion.php" method="POST"> 
+            <input type="hidden" name="id_orden" value="<?php echo $_GET['id_orden']; ?>"> 
+            <label for="rfc">RFC:</label> 
+            <input type="text" id="rfc" name="rfc" required> 
+            <label for="nombre">Nombre o Razón Social:</label> 
+            <input type="text" id="nombre" name="nombre" required> 
+            <label for="direccion">Dirección:</label> 
+            <input type="text" id="direccion" name="direccion" required> 
+            <label for="correo">Correo Electrónico:</label> 
+            <input type="email" id="correo" name="correo" required> 
+            <button type="submit">Generar Factura</button> 
+        </form> 
     </div>
-    <br>
-    <br>
     <footer>
    <div class="footer">
       <div class="container">
@@ -223,5 +194,6 @@ $result_ordenes_usuario = $stmt_ordenes_usuario->get_result();
       </div>
    </div>
 </footer>
-</body>
+
+</body> 
 </html>
