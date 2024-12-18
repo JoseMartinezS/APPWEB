@@ -3,10 +3,8 @@
 session_start();
 require '../config.inc.php';
 
-// Verificar si el usuario es un administrador
-if (!isset($_SESSION['is_admin']) || $_SESSION['is_admin'] !== 1) {
-    die('Acceso denegado.');
-}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">

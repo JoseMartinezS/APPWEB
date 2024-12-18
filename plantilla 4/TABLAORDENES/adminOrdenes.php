@@ -164,7 +164,7 @@ $result_ordenes = $conn->query($sql_ordenes);
                                         <i class="fa fa-user" aria-hidden="true"></i>
                                     </a>
                                 <?php endif; ?>
-                                <a class="nav-link" href="TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
+                                <a class="nav-link" href="../TABLACARRITO/MostrarProductos.php" style="color: rgb(8, 8, 8);" title="Carrito">
                                     <i class="fa fa-shopping-cart" aria-hidden="true"></i>
                                 </a>
                             </div>
